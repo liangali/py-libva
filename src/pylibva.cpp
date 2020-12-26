@@ -1,11 +1,71 @@
 #include <pybind11/pybind11.h>
 
-int add(int i, int j) {
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+
+#include <va/va.h>
+#include <va/va_drm.h>
+
+static VADisplay va_dpy = NULL;
+static int drm_fd = -1;
+
+VADisplay getVADisplay(void)
+{
+    const char *drm_device_paths[] = {
+        "/dev/dri/renderD128",
+        "/dev/dri/card0",
+        NULL
+    };
+
+    for (int i = 0; drm_device_paths[i]; i++) {
+        drm_fd = open(drm_device_paths[i], O_RDWR);
+        if (drm_fd < 0)
+            continue;
+
+        va_dpy = vaGetDisplayDRM(drm_fd);
+        if (va_dpy)
+            return va_dpy;
+
+        close(drm_fd);
+        drm_fd = -1;
+    }
+
+    return NULL;
+}
+
+void closeVADisplay()
+{
+    if (drm_fd < 0)
+        return;
+
+    close(drm_fd);
+    drm_fd = -1;
+}
+
+int add(int i, int j) 
+{
     return i + j;
+}
+
+uint64_t init()
+{
+    int major_ver, minor_ver;
+    VAStatus va_status;
+    unsigned int i;
+
+    va_dpy = getVADisplay();
+    printf("####INFO: va_dpy = 0x%x, %d\n", va_dpy, va_dpy);
+
+    va_status = vaInitialize(va_dpy, &major_ver, &minor_ver);
+
+    return uint64_t(va_dpy);
 }
 
 PYBIND11_MODULE(pylibva, m) {
     m.doc() = "libva python bindings"; // optional module docstring
     m.def("add", &add, "A function which adds two numbers");
+    m.def("init", &init, "function to init va");
 }
 

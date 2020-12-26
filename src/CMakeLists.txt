@@ -8,4 +8,5 @@ project(pylibva)
 
 include_directories (pylibva /usr/local/lib/python3.8/dist-packages/pybind11/include /usr/include/python3.8)
 add_library(pylibva SHARED pylibva.cpp)
+target_link_libraries(pylibva va va-drm)
 set_target_properties(pylibva PROPERTIES PREFIX "")

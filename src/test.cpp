@@ -50,6 +50,7 @@ int main()
     unsigned int i;
 
     va_dpy = getVADisplay();
+    printf("####INFO: va_dpy = %x\n", va_dpy);
 
     va_status = vaInitialize(va_dpy, &major_ver, &minor_ver);
 
