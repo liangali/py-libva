@@ -3,8 +3,19 @@
 #include <unistd.h>
 #include <fcntl.h>
 
+#include<vector>
+
 #include <va/va.h>
 #include <va/va_drm.h>
+
+using namespace std;
+
+#define CHECK_VASTATUS(va_status,func, ret)                             \
+if (va_status != VA_STATUS_SUCCESS) {                                   \
+    fprintf(stderr,"%s failed with error code %d (%s),exit\n",func, va_status, vaErrorStr(va_status)); \
+    ret_val = ret;                                                      \
+    exit(1);                                                         \
+}
 
 static VADisplay va_dpy = NULL;
 static int drm_fd = -1;
@@ -48,7 +59,8 @@ int main()
     int major_ver, minor_ver;
     VAStatus va_status;
     unsigned int i;
-
+    int ret_val = 0;
+    
     va_dpy = getVADisplay();
     printf("####INFO: va_dpy = %x\n", va_dpy);
 
@@ -62,6 +74,11 @@ int main()
 
     int max_num_profiles = vaMaxNumProfiles(va_dpy);
     printf("####INFO: profile num: %d\n", max_num_profiles);
+
+    int num_profiles = 0;
+    vector<VAProfile*> profile_list(max_num_profiles, NULL);
+    va_status = vaQueryConfigProfiles(va_dpy, (VAProfile*)profile_list.data(), &num_profiles);
+    CHECK_VASTATUS(va_status, "vaQueryConfigProfiles", 6);
 
     closeVADisplay();
 
