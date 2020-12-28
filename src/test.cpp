@@ -3,7 +3,9 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-#include<vector>
+#include <vector>
+#include <set>
+#include <map>
 
 #include <va/va.h>
 #include <va/va_drm.h>
@@ -19,6 +21,12 @@ if (va_status != VA_STATUS_SUCCESS) {                                   \
 
 static VADisplay va_dpy = NULL;
 static int drm_fd = -1;
+
+#define VA_PROFILE_MAP(P)  {P, #P}
+
+static std::map<VAProfile, const char*> profile_map = {
+    VA_PROFILE_MAP(VAProfileNone),
+};
 
 VADisplay getVADisplay(void)
 {
@@ -76,10 +84,17 @@ int main()
     printf("####INFO: profile num: %d\n", max_num_profiles);
 
     int num_profiles = 0;
-    vector<VAProfile*> profile_list(max_num_profiles, NULL);
+    vector<VAProfile> profile_list(max_num_profiles, VAProfileNone);
     va_status = vaQueryConfigProfiles(va_dpy, (VAProfile*)profile_list.data(), &num_profiles);
     CHECK_VASTATUS(va_status, "vaQueryConfigProfiles", 6);
 
+    set<VAProfile> profile_set;
+    for (auto p: profile_list) {
+        if (p != VAProfileNone) {
+            profile_set.insert(p);
+        }
+    }
+    
     closeVADisplay();
 
     printf("done\n");
