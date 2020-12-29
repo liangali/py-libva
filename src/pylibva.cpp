@@ -107,8 +107,15 @@ VADisplay getVADisplay(void)
     return NULL;
 }
 
-void closeVADisplay()
+int add(int i, int j) 
 {
+    return i + j;
+}
+
+void vaClose()
+{
+    vaTerminate(va_dpy);
+
     if (drm_fd < 0)
         return;
 
@@ -116,12 +123,7 @@ void closeVADisplay()
     drm_fd = -1;
 }
 
-int add(int i, int j) 
-{
-    return i + j;
-}
-
-uint64_t init()
+uint64_t vaInit()
 {
     int major_ver, minor_ver;
 
@@ -160,7 +162,6 @@ std::vector<const char*> getProfiles()
     return profile_list;
 }
 
-
 std::vector<const char*> getEntrypoints(const char* profile_str) 
 {
     std::vector<const char*> entrypoint_list;
@@ -183,11 +184,12 @@ std::vector<const char*> getEntrypoints(const char* profile_str)
 
     return entrypoint_list;
 }
+
 PYBIND11_MODULE(pylibva, m) {
     m.doc() = "libva python bindings"; // optional module docstring
     m.def("add", &add, "A function which adds two numbers");
-    m.def("init", &init, "function to init va");
-    m.def("close", &closeVADisplay, "close drm fd handle");
+    m.def("init", &vaInit, "Initialize VADisplay");
+    m.def("close", &vaClose, "Close VADisplay and drm fd");
     m.def("profiles", &getProfiles, "Get all supported VA Profiles");
     m.def("entrypoints", &getEntrypoints, "Get Entrypoints list of a Profile");
 }

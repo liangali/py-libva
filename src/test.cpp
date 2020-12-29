@@ -55,6 +55,8 @@ VADisplay getVADisplay(void)
 
 void closeVADisplay()
 {
+    vaTerminate(va_dpy);
+    
     if (drm_fd < 0)
         return;
 
