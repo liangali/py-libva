@@ -16,46 +16,72 @@ static VAStatus va_status;
 static VADisplay va_dpy = NULL;
 static int drm_fd = -1;
 
-#define VA_PROFILE_MAP(P)  {P, #P}
+#define VA_ENUM_STR_MAP(P)  {P, #P}
 
-static std::map<VAProfile, const char*> profile_map = {
-    VA_PROFILE_MAP(VAProfileNone),
-    VA_PROFILE_MAP(VAProfileMPEG2Simple),
-    VA_PROFILE_MAP(VAProfileMPEG2Main),
-    VA_PROFILE_MAP(VAProfileMPEG4Simple),
-    VA_PROFILE_MAP(VAProfileMPEG4AdvancedSimple),
-    VA_PROFILE_MAP(VAProfileMPEG4Main),
-    VA_PROFILE_MAP(VAProfileH264Baseline),
-    VA_PROFILE_MAP(VAProfileH264Main),
-    VA_PROFILE_MAP(VAProfileH264High),
-    VA_PROFILE_MAP(VAProfileVC1Simple),
-    VA_PROFILE_MAP(VAProfileVC1Main),
-    VA_PROFILE_MAP(VAProfileVC1Advanced),
-    VA_PROFILE_MAP(VAProfileH263Baseline),
-    VA_PROFILE_MAP(VAProfileJPEGBaseline),
-    VA_PROFILE_MAP(VAProfileH264ConstrainedBaseline),
-    VA_PROFILE_MAP(VAProfileVP8Version0_3),
-    VA_PROFILE_MAP(VAProfileH264MultiviewHigh),
-    VA_PROFILE_MAP(VAProfileH264StereoHigh),
-    VA_PROFILE_MAP(VAProfileHEVCMain),
-    VA_PROFILE_MAP(VAProfileHEVCMain10),
-    VA_PROFILE_MAP(VAProfileVP9Profile0),
-    VA_PROFILE_MAP(VAProfileVP9Profile1),
-    VA_PROFILE_MAP(VAProfileVP9Profile2),
-    VA_PROFILE_MAP(VAProfileVP9Profile3),
-    VA_PROFILE_MAP(VAProfileHEVCMain12),
-    VA_PROFILE_MAP(VAProfileHEVCMain422_10),
-    VA_PROFILE_MAP(VAProfileHEVCMain422_12),
-    VA_PROFILE_MAP(VAProfileHEVCMain444),
-    VA_PROFILE_MAP(VAProfileHEVCMain444_10),
-    VA_PROFILE_MAP(VAProfileHEVCMain444_12),
-    VA_PROFILE_MAP(VAProfileHEVCSccMain),
-    VA_PROFILE_MAP(VAProfileHEVCSccMain10),
-    VA_PROFILE_MAP(VAProfileHEVCSccMain444),
-    VA_PROFILE_MAP(VAProfileAV1Profile0),
-    VA_PROFILE_MAP(VAProfileAV1Profile1),
-    VA_PROFILE_MAP(VAProfileHEVCSccMain444_10)
+static std::map<VAProfile, const char*> profile_map = 
+{
+    VA_ENUM_STR_MAP(VAProfileNone),
+    VA_ENUM_STR_MAP(VAProfileMPEG2Simple),
+    VA_ENUM_STR_MAP(VAProfileMPEG2Main),
+    VA_ENUM_STR_MAP(VAProfileMPEG4Simple),
+    VA_ENUM_STR_MAP(VAProfileMPEG4AdvancedSimple),
+    VA_ENUM_STR_MAP(VAProfileMPEG4Main),
+    VA_ENUM_STR_MAP(VAProfileH264Baseline),
+    VA_ENUM_STR_MAP(VAProfileH264Main),
+    VA_ENUM_STR_MAP(VAProfileH264High),
+    VA_ENUM_STR_MAP(VAProfileVC1Simple),
+    VA_ENUM_STR_MAP(VAProfileVC1Main),
+    VA_ENUM_STR_MAP(VAProfileVC1Advanced),
+    VA_ENUM_STR_MAP(VAProfileH263Baseline),
+    VA_ENUM_STR_MAP(VAProfileJPEGBaseline),
+    VA_ENUM_STR_MAP(VAProfileH264ConstrainedBaseline),
+    VA_ENUM_STR_MAP(VAProfileVP8Version0_3),
+    VA_ENUM_STR_MAP(VAProfileH264MultiviewHigh),
+    VA_ENUM_STR_MAP(VAProfileH264StereoHigh),
+    VA_ENUM_STR_MAP(VAProfileHEVCMain),
+    VA_ENUM_STR_MAP(VAProfileHEVCMain10),
+    VA_ENUM_STR_MAP(VAProfileVP9Profile0),
+    VA_ENUM_STR_MAP(VAProfileVP9Profile1),
+    VA_ENUM_STR_MAP(VAProfileVP9Profile2),
+    VA_ENUM_STR_MAP(VAProfileVP9Profile3),
+    VA_ENUM_STR_MAP(VAProfileHEVCMain12),
+    VA_ENUM_STR_MAP(VAProfileHEVCMain422_10),
+    VA_ENUM_STR_MAP(VAProfileHEVCMain422_12),
+    VA_ENUM_STR_MAP(VAProfileHEVCMain444),
+    VA_ENUM_STR_MAP(VAProfileHEVCMain444_10),
+    VA_ENUM_STR_MAP(VAProfileHEVCMain444_12),
+    VA_ENUM_STR_MAP(VAProfileHEVCSccMain),
+    VA_ENUM_STR_MAP(VAProfileHEVCSccMain10),
+    VA_ENUM_STR_MAP(VAProfileHEVCSccMain444),
+    VA_ENUM_STR_MAP(VAProfileAV1Profile0),
+    VA_ENUM_STR_MAP(VAProfileAV1Profile1),
+    VA_ENUM_STR_MAP(VAProfileHEVCSccMain444_10)
 };
+
+static std::map<VAEntrypoint, const char*> entrypoint_map = 
+{
+    VA_ENUM_STR_MAP(VAEntrypointVLD),
+    VA_ENUM_STR_MAP(VAEntrypointIZZ),
+    VA_ENUM_STR_MAP(VAEntrypointIDCT),
+    VA_ENUM_STR_MAP(VAEntrypointMoComp),
+    VA_ENUM_STR_MAP(VAEntrypointDeblocking),
+    VA_ENUM_STR_MAP(VAEntrypointEncSlice),
+    VA_ENUM_STR_MAP(VAEntrypointEncPicture),
+    VA_ENUM_STR_MAP(VAEntrypointEncSliceLP),
+    VA_ENUM_STR_MAP(VAEntrypointVideoProc),
+    VA_ENUM_STR_MAP(VAEntrypointFEI),
+    VA_ENUM_STR_MAP(VAEntrypointStats)
+};
+
+VAProfile str2Profile(const char* str)
+{
+    for(auto m : profile_map) {
+        if (strcmp(str, m.second) == 0) {
+            return m.first;
+        }
+    }
+    return VAProfileNone;
+}
 
 VADisplay getVADisplay(void)
 {
@@ -134,10 +160,35 @@ std::vector<const char*> getProfiles()
     return profile_list;
 }
 
+
+std::vector<const char*> getEntrypoints(const char* profile_str) 
+{
+    std::vector<const char*> entrypoint_list;
+
+    int num_entrypoint = 0;
+    int max = vaMaxNumEntrypoints (va_dpy);
+    std::vector<VAEntrypoint> entrypoints(max);
+    VAProfile profile = str2Profile(profile_str);
+
+    va_status = vaQueryConfigEntrypoints(va_dpy, profile, entrypoints.data(), &num_entrypoint);
+    if (va_status != VA_STATUS_SUCCESS) {
+        return entrypoint_list;
+    }
+
+    for (auto e: entrypoints) {
+        if (int(e) != 0) {
+            entrypoint_list.push_back(entrypoint_map[e]);
+        }
+    }
+
+    return entrypoint_list;
+}
 PYBIND11_MODULE(pylibva, m) {
     m.doc() = "libva python bindings"; // optional module docstring
     m.def("add", &add, "A function which adds two numbers");
     m.def("init", &init, "function to init va");
-    m.def("profiles", &getProfiles, "Get all supported VA profiles");
+    m.def("close", &closeVADisplay, "close drm fd handle");
+    m.def("profiles", &getProfiles, "Get all supported VA Profiles");
+    m.def("entrypoints", &getEntrypoints, "Get Entrypoints list of a Profile");
 }
 
