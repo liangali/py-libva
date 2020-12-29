@@ -11,6 +11,7 @@ for p in pl:
     el = pylibva.entrypoints(p)
     for e in el:
         print('    %s' % e)
+        al = pylibva.configs(p, e)
 
 pylibva.close()
 print('done')

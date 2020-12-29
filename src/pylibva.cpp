@@ -83,6 +83,16 @@ VAProfile str2Profile(const char* str)
     return VAProfileNone;
 }
 
+VAEntrypoint str2Entrypoint(const char* str)
+{
+    for(auto m : entrypoint_map) {
+        if (strcmp(str, m.second) == 0) {
+            return m.first;
+        }
+    }
+    return VAEntrypointVLD;
+}
+
 VADisplay getVADisplay(void)
 {
     const char *drm_device_paths[] = {
@@ -185,12 +195,38 @@ std::vector<const char*> getEntrypoints(const char* profile_str)
     return entrypoint_list;
 }
 
+std::vector<const char*> getConfigs(const char* profile_str, const char* entrypoint_str) 
+{
+    std::vector<const char*> config_list;
+    VAProfile profile = str2Profile(profile_str);
+    VAEntrypoint entrypoint = str2Entrypoint(entrypoint_str);
+
+    int max_num_attributes = vaMaxNumConfigAttributes(va_dpy);
+    std::vector<VAConfigAttrib> attrib_list(max_num_attributes);
+    for (size_t i = 0; i < max_num_attributes; i++) {
+        attrib_list[i].type = (VAConfigAttribType)i;
+    }
+
+    va_status = vaGetConfigAttributes(va_dpy, profile, entrypoint, attrib_list.data(), max_num_attributes);
+    if (VA_STATUS_ERROR_UNSUPPORTED_PROFILE == va_status || 
+        VA_STATUS_ERROR_UNSUPPORTED_ENTRYPOINT == va_status ) {
+        return config_list;
+    }
+
+    for (auto a: attrib_list) {
+        printf("####INFO: type = %02d, value = 0x%08x\n", a.type, a.value);
+    }
+
+    return config_list;
+}
+
 PYBIND11_MODULE(pylibva, m) {
     m.doc() = "libva python bindings"; // optional module docstring
     m.def("add", &add, "A function which adds two numbers");
     m.def("init", &vaInit, "Initialize VADisplay");
     m.def("close", &vaClose, "Close VADisplay and drm fd");
-    m.def("profiles", &getProfiles, "Get all supported VA Profiles");
-    m.def("entrypoints", &getEntrypoints, "Get Entrypoints list of a Profile");
+    m.def("profiles", &getProfiles, "Query supported profiles");
+    m.def("entrypoints", &getEntrypoints, "Query supported entrypoints for a given profile");
+    m.def("configs", &getConfigs, "Get attributes for a given profile/entrypoint pair ");
 }
 
