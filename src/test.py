@@ -12,6 +12,7 @@ for p in pl:
     for e in el:
         print('    %s' % e)
         al = pylibva.configs(p, e)
+        print("\n", al)
 
 pylibva.close()
 print('done')

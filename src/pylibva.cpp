@@ -73,6 +73,159 @@ static std::map<VAEntrypoint, const char*> entrypoint_map =
     VA_ENUM_STR_MAP(VAEntrypointStats)
 };
 
+static std::map<VAConfigAttribType, const char*> configattrib_map = 
+{
+    VA_ENUM_STR_MAP(VAConfigAttribRTFormat),
+    VA_ENUM_STR_MAP(VAConfigAttribSpatialResidual),
+    VA_ENUM_STR_MAP(VAConfigAttribSpatialClipping),
+    VA_ENUM_STR_MAP(VAConfigAttribIntraResidual),
+    VA_ENUM_STR_MAP(VAConfigAttribEncryption),
+    VA_ENUM_STR_MAP(VAConfigAttribRateControl),
+    VA_ENUM_STR_MAP(VAConfigAttribDecSliceMode),
+    VA_ENUM_STR_MAP(VAConfigAttribDecJPEG),
+    VA_ENUM_STR_MAP(VAConfigAttribDecProcessing),
+    VA_ENUM_STR_MAP(VAConfigAttribEncPackedHeaders),
+    VA_ENUM_STR_MAP(VAConfigAttribEncInterlaced),
+    VA_ENUM_STR_MAP(VAConfigAttribEncMaxRefFrames),
+    VA_ENUM_STR_MAP(VAConfigAttribEncMaxSlices),
+    VA_ENUM_STR_MAP(VAConfigAttribEncSliceStructure),
+    VA_ENUM_STR_MAP(VAConfigAttribEncMacroblockInfo),
+    VA_ENUM_STR_MAP(VAConfigAttribMaxPictureWidth),
+    VA_ENUM_STR_MAP(VAConfigAttribMaxPictureHeight),
+    VA_ENUM_STR_MAP(VAConfigAttribEncJPEG),
+    VA_ENUM_STR_MAP(VAConfigAttribEncQualityRange),
+    VA_ENUM_STR_MAP(VAConfigAttribEncQuantization),
+    VA_ENUM_STR_MAP(VAConfigAttribEncIntraRefresh),
+    VA_ENUM_STR_MAP(VAConfigAttribEncSkipFrame),
+    VA_ENUM_STR_MAP(VAConfigAttribEncROI),
+    VA_ENUM_STR_MAP(VAConfigAttribEncRateControlExt),
+    VA_ENUM_STR_MAP(VAConfigAttribProcessingRate),
+    VA_ENUM_STR_MAP(VAConfigAttribEncDirtyRect),
+    VA_ENUM_STR_MAP(VAConfigAttribEncParallelRateControl),
+    VA_ENUM_STR_MAP(VAConfigAttribEncDynamicScaling),
+    VA_ENUM_STR_MAP(VAConfigAttribFrameSizeToleranceSupport),
+    VA_ENUM_STR_MAP(VAConfigAttribFEIFunctionType),
+    VA_ENUM_STR_MAP(VAConfigAttribFEIMVPredictors),
+    VA_ENUM_STR_MAP(VAConfigAttribStats),
+    VA_ENUM_STR_MAP(VAConfigAttribEncTileSupport),
+    VA_ENUM_STR_MAP(VAConfigAttribCustomRoundingControl),
+    VA_ENUM_STR_MAP(VAConfigAttribQPBlockSize),
+    VA_ENUM_STR_MAP(VAConfigAttribMaxFrameSize),
+    VA_ENUM_STR_MAP(VAConfigAttribPredictionDirection),
+    VA_ENUM_STR_MAP(VAConfigAttribMultipleFrame),
+    VA_ENUM_STR_MAP(VAConfigAttribContextPriority),
+    VA_ENUM_STR_MAP(VAConfigAttribTypeMax)
+};
+
+#define ADD_ATTRIB_TYPE(type) if (value & type) result.push_back(#type)
+
+std::vector<const char*> parseConfig(VAConfigAttribType type, int value)
+{
+    std::vector<const char*> result;
+    switch (type)
+    {
+        case VAConfigAttribRTFormat:
+            ADD_ATTRIB_TYPE(VA_RT_FORMAT_YUV420);
+            ADD_ATTRIB_TYPE(VA_RT_FORMAT_YUV422);
+            ADD_ATTRIB_TYPE(VA_RT_FORMAT_YUV444);
+            ADD_ATTRIB_TYPE(VA_RT_FORMAT_YUV411);
+            ADD_ATTRIB_TYPE(VA_RT_FORMAT_YUV400);
+            ADD_ATTRIB_TYPE(VA_RT_FORMAT_YUV420_10);
+            ADD_ATTRIB_TYPE(VA_RT_FORMAT_YUV422_10);
+            ADD_ATTRIB_TYPE(VA_RT_FORMAT_YUV444_10);
+            ADD_ATTRIB_TYPE(VA_RT_FORMAT_YUV420_12);
+            ADD_ATTRIB_TYPE(VA_RT_FORMAT_YUV422_12);
+            ADD_ATTRIB_TYPE(VA_RT_FORMAT_YUV444_12);
+            ADD_ATTRIB_TYPE(VA_RT_FORMAT_RGB16);
+            ADD_ATTRIB_TYPE(VA_RT_FORMAT_RGB32);
+            ADD_ATTRIB_TYPE(VA_RT_FORMAT_RGBP);
+            ADD_ATTRIB_TYPE(VA_RT_FORMAT_RGB32_10);
+            ADD_ATTRIB_TYPE(VA_RT_FORMAT_PROTECTED);
+            break;
+        case VAConfigAttribSpatialResidual:
+            break;
+        case VAConfigAttribSpatialClipping:
+            break;
+        case VAConfigAttribIntraResidual:
+            break;
+        case VAConfigAttribEncryption:
+            break;
+        case VAConfigAttribRateControl:
+            break;
+        case VAConfigAttribDecSliceMode:
+            break;
+        case VAConfigAttribDecJPEG:
+            break;
+        case VAConfigAttribDecProcessing:
+            break;
+        case VAConfigAttribEncPackedHeaders:
+            break;
+        case VAConfigAttribEncInterlaced:
+            break;
+        case VAConfigAttribEncMaxRefFrames:
+            break;
+        case VAConfigAttribEncMaxSlices:
+            break;
+        case VAConfigAttribEncSliceStructure:
+            break;
+        case VAConfigAttribEncMacroblockInfo:
+            break;
+        case VAConfigAttribMaxPictureWidth:
+            break;
+        case VAConfigAttribMaxPictureHeight:
+            break;
+        case VAConfigAttribEncJPEG:
+            break;
+        case VAConfigAttribEncQualityRange:
+            break;
+        case VAConfigAttribEncQuantization:
+            break;
+        case VAConfigAttribEncIntraRefresh:
+            break;
+        case VAConfigAttribEncSkipFrame:
+            break;
+        case VAConfigAttribEncROI:
+            break;
+        case VAConfigAttribEncRateControlExt:
+            break;
+        case VAConfigAttribProcessingRate:
+            break;
+        case VAConfigAttribEncDirtyRect:
+            break;
+        case VAConfigAttribEncParallelRateControl:
+            break;
+        case VAConfigAttribEncDynamicScaling:
+            break;
+        case VAConfigAttribFrameSizeToleranceSupport:
+            break;
+        case VAConfigAttribFEIFunctionType:
+            break;
+        case VAConfigAttribFEIMVPredictors:
+            break;
+        case VAConfigAttribStats:
+            break;
+        case VAConfigAttribEncTileSupport:
+            break;
+        case VAConfigAttribCustomRoundingControl:
+            break;
+        case VAConfigAttribQPBlockSize:
+            break;
+        case VAConfigAttribMaxFrameSize:
+            break;
+        case VAConfigAttribPredictionDirection:
+            break;
+        case VAConfigAttribMultipleFrame:
+            break;
+        case VAConfigAttribContextPriority:
+            break;
+        case VAConfigAttribTypeMax:
+            break;
+        default:
+            break;
+    }
+    return result;
+}
+
 VAProfile str2Profile(const char* str)
 {
     for(auto m : profile_map) {
@@ -195,9 +348,9 @@ std::vector<const char*> getEntrypoints(const char* profile_str)
     return entrypoint_list;
 }
 
-std::vector<const char*> getConfigs(const char* profile_str, const char* entrypoint_str) 
+std::map<const char*, std::vector<const char*>> getConfigs(const char* profile_str, const char* entrypoint_str) 
 {
-    std::vector<const char*> config_list;
+    std::map<const char*, std::vector<const char*>> config_list;
     VAProfile profile = str2Profile(profile_str);
     VAEntrypoint entrypoint = str2Entrypoint(entrypoint_str);
 
@@ -214,7 +367,11 @@ std::vector<const char*> getConfigs(const char* profile_str, const char* entrypo
     }
 
     for (auto a: attrib_list) {
-        printf("####INFO: type = %02d, value = 0x%08x\n", a.type, a.value);
+        if (a.value != VA_ATTRIB_NOT_SUPPORTED) {
+            std::vector<const char*> value_list(2);
+            config_list[configattrib_map[a.type]] = parseConfig(a.type, a.value);
+            //printf("####INFO: type = %-40s, value = 0x%08x\n", configattrib_map[a.type], a.value);
+        }
     }
 
     return config_list;
