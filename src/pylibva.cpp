@@ -122,7 +122,7 @@ static std::map<VAConfigAttribType, const char*> configattrib_map =
 
 std::vector<const char*> parseConfig(VAConfigAttribType type, int value)
 {
-    char str[256] = {};
+    char *str = new char[256];
     sprintf(str, "0x%08x", value);
     std::vector<const char*> result;
     switch (type)
