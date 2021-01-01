@@ -1,18 +1,22 @@
 import sys
 sys.path.append('../build')
 sys.path.append('py-libva/build')
+import json
 import pylibva
 
 pylibva.init()
 
+va_caps = {}
 pl = pylibva.profiles()
 for p in pl:
-    print(p)
+    va_caps[p] = {}
     el = pylibva.entrypoints(p)
     for e in el:
-        print('    %s' % e)
         al = pylibva.configs(p, e)
-        print("\n", al)
+        va_caps[p][e] = json.loads(json.dumps(al))
+
+with open('../../out.json', 'wt') as f:
+    f.writelines(json.dumps(va_caps))
 
 pylibva.close()
 print('done')
