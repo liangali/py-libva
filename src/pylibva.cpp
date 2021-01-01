@@ -125,6 +125,10 @@ std::vector<const char*> parseConfig(VAConfigAttribType type, int value)
     char *str = new char[256];
     sprintf(str, "0x%08x", value);
     std::vector<const char*> result;
+    VAConfigAttribValEncROI* roi = (VAConfigAttribValEncROI*)&value;
+    VAConfigAttribValEncRateControlExt* rce = (VAConfigAttribValEncRateControlExt*)&value;
+    VAConfigAttribValMaxFrameSize* mfs = (VAConfigAttribValMaxFrameSize*)&value;
+
     switch (type)
     {
         case VAConfigAttribRTFormat:
@@ -202,9 +206,11 @@ std::vector<const char*> parseConfig(VAConfigAttribType type, int value)
             ADD_ATTRIB_STR(VA_ENC_INTERLACED_PAFF);
             break;
         case VAConfigAttribEncMaxRefFrames:
+            sprintf(str, "ref_num_list0 = %d, ref_num_list1 = %d", value&0xffff, (value>>16)&0xffff);
             result.push_back(str);
             break;
         case VAConfigAttribEncMaxSlices:
+            sprintf(str, "%d", value);
             result.push_back(str);
             break;
         case VAConfigAttribEncSliceStructure:
@@ -219,15 +225,18 @@ std::vector<const char*> parseConfig(VAConfigAttribType type, int value)
             result.push_back(str);
             break;
         case VAConfigAttribMaxPictureWidth:
+            sprintf(str, "%d", value);
             result.push_back(str);
             break;
         case VAConfigAttribMaxPictureHeight:
+            sprintf(str, "%d", value);
             result.push_back(str);
             break;
         case VAConfigAttribEncJPEG:
             result.push_back(str);
             break;
         case VAConfigAttribEncQualityRange:
+            sprintf(str, "%d", value);
             result.push_back(str);
             break;
         case VAConfigAttribEncQuantization:
@@ -248,9 +257,16 @@ std::vector<const char*> parseConfig(VAConfigAttribType type, int value)
             result.push_back(str);
             break;
         case VAConfigAttribEncROI:
+            sprintf(str, "num_roi_regions = %d, priority_support = %d, delta_support = %d", 
+                roi->bits.num_roi_regions,
+                roi->bits.roi_rc_priority_support,
+                roi->bits.roi_rc_qp_delta_support);
             result.push_back(str);
             break;
         case VAConfigAttribEncRateControlExt:
+            sprintf(str, "max_temporal_layers = %d, temporal_layer_rate_control_flag = %d", 
+                rce->bits.max_num_temporal_layers_minus1 + 1, 
+                rce->bits.temporal_layer_bitrate_control_flag);
             result.push_back(str);
             break;
         case VAConfigAttribProcessingRate:
@@ -263,6 +279,7 @@ std::vector<const char*> parseConfig(VAConfigAttribType type, int value)
             result.push_back(str);
             break;
         case VAConfigAttribEncParallelRateControl:
+            sprintf(str, "maximum_supported_layer = %d", value);
             result.push_back(str);
             break;
         case VAConfigAttribEncDynamicScaling:
@@ -284,12 +301,13 @@ std::vector<const char*> parseConfig(VAConfigAttribType type, int value)
             result.push_back(str);
             break;
         case VAConfigAttribCustomRoundingControl:
-            result.push_back(str);
+            result.push_back(value? "True" : "False");
             break;
         case VAConfigAttribQPBlockSize:
             result.push_back(str);
             break;
         case VAConfigAttribMaxFrameSize:
+            sprintf(str, "max_frame_size = %d, multiple_pass = %d", mfs->bits.max_frame_size, mfs->bits.multiple_pass);
             result.push_back(str);
             break;
         case VAConfigAttribPredictionDirection:
