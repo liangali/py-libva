@@ -117,113 +117,199 @@ static std::map<VAConfigAttribType, const char*> configattrib_map =
     VA_ENUM_STR_MAP(VAConfigAttribTypeMax)
 };
 
-#define ADD_ATTRIB_TYPE(type) if (value & type) result.push_back(#type)
+#define ADD_ATTRIB_STR(type) if (value & type) result.push_back(#type)
+#define ADD_ATTRIB_VALUE()
 
 std::vector<const char*> parseConfig(VAConfigAttribType type, int value)
 {
+    char str[256] = {};
+    sprintf(str, "0x%08x", value);
     std::vector<const char*> result;
     switch (type)
     {
         case VAConfigAttribRTFormat:
-            ADD_ATTRIB_TYPE(VA_RT_FORMAT_YUV420);
-            ADD_ATTRIB_TYPE(VA_RT_FORMAT_YUV422);
-            ADD_ATTRIB_TYPE(VA_RT_FORMAT_YUV444);
-            ADD_ATTRIB_TYPE(VA_RT_FORMAT_YUV411);
-            ADD_ATTRIB_TYPE(VA_RT_FORMAT_YUV400);
-            ADD_ATTRIB_TYPE(VA_RT_FORMAT_YUV420_10);
-            ADD_ATTRIB_TYPE(VA_RT_FORMAT_YUV422_10);
-            ADD_ATTRIB_TYPE(VA_RT_FORMAT_YUV444_10);
-            ADD_ATTRIB_TYPE(VA_RT_FORMAT_YUV420_12);
-            ADD_ATTRIB_TYPE(VA_RT_FORMAT_YUV422_12);
-            ADD_ATTRIB_TYPE(VA_RT_FORMAT_YUV444_12);
-            ADD_ATTRIB_TYPE(VA_RT_FORMAT_RGB16);
-            ADD_ATTRIB_TYPE(VA_RT_FORMAT_RGB32);
-            ADD_ATTRIB_TYPE(VA_RT_FORMAT_RGBP);
-            ADD_ATTRIB_TYPE(VA_RT_FORMAT_RGB32_10);
-            ADD_ATTRIB_TYPE(VA_RT_FORMAT_PROTECTED);
+            ADD_ATTRIB_STR(VA_RT_FORMAT_YUV420);
+            ADD_ATTRIB_STR(VA_RT_FORMAT_YUV422);
+            ADD_ATTRIB_STR(VA_RT_FORMAT_YUV444);
+            ADD_ATTRIB_STR(VA_RT_FORMAT_YUV411);
+            ADD_ATTRIB_STR(VA_RT_FORMAT_YUV400);
+            ADD_ATTRIB_STR(VA_RT_FORMAT_YUV420_10);
+            ADD_ATTRIB_STR(VA_RT_FORMAT_YUV422_10);
+            ADD_ATTRIB_STR(VA_RT_FORMAT_YUV444_10);
+            ADD_ATTRIB_STR(VA_RT_FORMAT_YUV420_12);
+            ADD_ATTRIB_STR(VA_RT_FORMAT_YUV422_12);
+            ADD_ATTRIB_STR(VA_RT_FORMAT_YUV444_12);
+            ADD_ATTRIB_STR(VA_RT_FORMAT_RGB16);
+            ADD_ATTRIB_STR(VA_RT_FORMAT_RGB32);
+            ADD_ATTRIB_STR(VA_RT_FORMAT_RGBP);
+            ADD_ATTRIB_STR(VA_RT_FORMAT_RGB32_10);
+            ADD_ATTRIB_STR(VA_RT_FORMAT_PROTECTED);
             break;
         case VAConfigAttribSpatialResidual:
+            result.push_back(str);
             break;
         case VAConfigAttribSpatialClipping:
+            result.push_back(str);
             break;
         case VAConfigAttribIntraResidual:
+            result.push_back(str);
             break;
         case VAConfigAttribEncryption:
+            result.push_back(str);
             break;
         case VAConfigAttribRateControl:
+            ADD_ATTRIB_STR(VA_RC_NONE);
+            ADD_ATTRIB_STR(VA_RC_CBR);
+            ADD_ATTRIB_STR(VA_RC_VBR);
+            ADD_ATTRIB_STR(VA_RC_VCM);
+            ADD_ATTRIB_STR(VA_RC_CQP);
+            ADD_ATTRIB_STR(VA_RC_VBR_CONSTRAINED);
+            ADD_ATTRIB_STR(VA_RC_ICQ);
+            ADD_ATTRIB_STR(VA_RC_MB);
+            ADD_ATTRIB_STR(VA_RC_CFS);
+            ADD_ATTRIB_STR(VA_RC_PARALLEL);
+            ADD_ATTRIB_STR(VA_RC_QVBR);
+            ADD_ATTRIB_STR(VA_RC_AVBR);
+            ADD_ATTRIB_STR(VA_RC_TCBRC);
             break;
         case VAConfigAttribDecSliceMode:
+            ADD_ATTRIB_STR(VA_DEC_SLICE_MODE_NORMAL);
+            ADD_ATTRIB_STR(VA_DEC_SLICE_MODE_BASE);
             break;
         case VAConfigAttribDecJPEG:
+            ADD_ATTRIB_STR(VA_ROTATION_NONE);
+            ADD_ATTRIB_STR(VA_ROTATION_90);
+            ADD_ATTRIB_STR(VA_ROTATION_180);
+            ADD_ATTRIB_STR(VA_ROTATION_270);
             break;
         case VAConfigAttribDecProcessing:
+            ADD_ATTRIB_STR(VA_DEC_PROCESSING_NONE);
+            ADD_ATTRIB_STR(VA_DEC_PROCESSING);
             break;
         case VAConfigAttribEncPackedHeaders:
+            ADD_ATTRIB_STR(VA_ENC_PACKED_HEADER_NONE);
+            ADD_ATTRIB_STR(VA_ENC_PACKED_HEADER_SEQUENCE);
+            ADD_ATTRIB_STR(VA_ENC_PACKED_HEADER_PICTURE);
+            ADD_ATTRIB_STR(VA_ENC_PACKED_HEADER_SLICE);
+            ADD_ATTRIB_STR(VA_ENC_PACKED_HEADER_MISC);
+            ADD_ATTRIB_STR(VA_ENC_PACKED_HEADER_RAW_DATA);
             break;
         case VAConfigAttribEncInterlaced:
+            ADD_ATTRIB_STR(VA_ENC_INTERLACED_NONE);
+            ADD_ATTRIB_STR(VA_ENC_INTERLACED_FRAME);
+            ADD_ATTRIB_STR(VA_ENC_INTERLACED_FIELD);
+            ADD_ATTRIB_STR(VA_ENC_INTERLACED_MBAFF);
+            ADD_ATTRIB_STR(VA_ENC_INTERLACED_PAFF);
             break;
         case VAConfigAttribEncMaxRefFrames:
+            result.push_back(str);
             break;
         case VAConfigAttribEncMaxSlices:
+            result.push_back(str);
             break;
         case VAConfigAttribEncSliceStructure:
+            ADD_ATTRIB_STR(VA_ENC_SLICE_STRUCTURE_POWER_OF_TWO_ROWS);
+            ADD_ATTRIB_STR(VA_ENC_SLICE_STRUCTURE_ARBITRARY_MACROBLOCKS);
+            ADD_ATTRIB_STR(VA_ENC_SLICE_STRUCTURE_EQUAL_ROWS);
+            ADD_ATTRIB_STR(VA_ENC_SLICE_STRUCTURE_MAX_SLICE_SIZE);
+            ADD_ATTRIB_STR(VA_ENC_SLICE_STRUCTURE_ARBITRARY_ROWS);
+            ADD_ATTRIB_STR(VA_ENC_SLICE_STRUCTURE_EQUAL_MULTI_ROWS);
             break;
         case VAConfigAttribEncMacroblockInfo:
+            result.push_back(str);
             break;
         case VAConfigAttribMaxPictureWidth:
+            result.push_back(str);
             break;
         case VAConfigAttribMaxPictureHeight:
+            result.push_back(str);
             break;
         case VAConfigAttribEncJPEG:
+            result.push_back(str);
             break;
         case VAConfigAttribEncQualityRange:
+            result.push_back(str);
             break;
         case VAConfigAttribEncQuantization:
+            ADD_ATTRIB_STR(VA_ENC_QUANTIZATION_NONE);
+            ADD_ATTRIB_STR(VA_ENC_QUANTIZATION_TRELLIS_SUPPORTED);
             break;
         case VAConfigAttribEncIntraRefresh:
+            ADD_ATTRIB_STR(VA_ENC_INTRA_REFRESH_NONE);
+            ADD_ATTRIB_STR(VA_ENC_INTRA_REFRESH_ROLLING_COLUMN);
+            ADD_ATTRIB_STR(VA_ENC_INTRA_REFRESH_ROLLING_ROW);
+            ADD_ATTRIB_STR(VA_ENC_INTRA_REFRESH_ADAPTIVE);
+            ADD_ATTRIB_STR(VA_ENC_INTRA_REFRESH_CYCLIC);
+            ADD_ATTRIB_STR(VA_ENC_INTRA_REFRESH_P_FRAME);
+            ADD_ATTRIB_STR(VA_ENC_INTRA_REFRESH_B_FRAME);
+            ADD_ATTRIB_STR(VA_ENC_INTRA_REFRESH_MULTI_REF);
             break;
         case VAConfigAttribEncSkipFrame:
+            result.push_back(str);
             break;
         case VAConfigAttribEncROI:
+            result.push_back(str);
             break;
         case VAConfigAttribEncRateControlExt:
+            result.push_back(str);
             break;
         case VAConfigAttribProcessingRate:
+            ADD_ATTRIB_STR(VA_PROCESSING_RATE_NONE);
+            ADD_ATTRIB_STR(VA_PROCESSING_RATE_ENCODE);
+            ADD_ATTRIB_STR(VA_PROCESSING_RATE_DECODE);
+            ADD_ATTRIB_STR(VA_ATTRIB_NOT_SUPPORTED);
             break;
         case VAConfigAttribEncDirtyRect:
+            result.push_back(str);
             break;
         case VAConfigAttribEncParallelRateControl:
+            result.push_back(str);
             break;
         case VAConfigAttribEncDynamicScaling:
+            result.push_back(str);
             break;
         case VAConfigAttribFrameSizeToleranceSupport:
+            result.push_back(str);
             break;
         case VAConfigAttribFEIFunctionType:
+            result.push_back(str);
             break;
         case VAConfigAttribFEIMVPredictors:
+            result.push_back(str);
             break;
         case VAConfigAttribStats:
+            result.push_back(str);
             break;
         case VAConfigAttribEncTileSupport:
+            result.push_back(str);
             break;
         case VAConfigAttribCustomRoundingControl:
+            result.push_back(str);
             break;
         case VAConfigAttribQPBlockSize:
+            result.push_back(str);
             break;
         case VAConfigAttribMaxFrameSize:
+            result.push_back(str);
             break;
         case VAConfigAttribPredictionDirection:
+            ADD_ATTRIB_STR(VA_PREDICTION_DIRECTION_PREVIOUS);
+            ADD_ATTRIB_STR(VA_PREDICTION_DIRECTION_FUTURE);
+            ADD_ATTRIB_STR(VA_PREDICTION_DIRECTION_BI_NOT_EMPTY);
             break;
         case VAConfigAttribMultipleFrame:
+            result.push_back(str);
             break;
         case VAConfigAttribContextPriority:
+            result.push_back(str);
             break;
         case VAConfigAttribTypeMax:
+            result.push_back(str);
             break;
         default:
             break;
-    }
-    return result;
+        }
+        return result;
 }
 
 VAProfile str2Profile(const char* str)
