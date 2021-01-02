@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <assert.h>
 
 #include <vector>
 #include <set>
@@ -96,7 +97,51 @@ int main()
             profile_set.insert(p);
         }
     }
-    
+
+    VAConfigAttrib attrib = {};
+    attrib.type = VAConfigAttribRTFormat;
+    va_status = vaGetConfigAttributes(va_dpy, VAProfileNone, VAEntrypointVideoProc, &attrib, 1);
+    CHECK_VASTATUS(va_status, "vaGetConfigAttributes", 6);
+
+    VAConfigID config_id = 0;
+    va_status = vaCreateConfig(va_dpy, VAProfileNone, VAEntrypointVideoProc, &attrib, 1, &config_id);
+    CHECK_VASTATUS(va_status, "vaCreateConfig", 6);
+
+    uint32_t num_surf_attribs = 0;
+    va_status = vaQuerySurfaceAttributes(va_dpy, config_id, nullptr, &num_surf_attribs);
+    vector<VASurfaceAttrib> surf_attribs(num_surf_attribs);
+    va_status = vaQuerySurfaceAttributes(va_dpy, config_id, surf_attribs.data(), &num_surf_attribs);
+    CHECK_VASTATUS(va_status, "vaQuerySurfaceAttributes", 6);
+    for (auto a: surf_attribs) {
+        printf("####LOG: type = %d, flags = 0x%08x, value = 0x%0x8\n", a.type, a.flags, a.value.value.i);
+    }
+
+    VASurfaceID surf_id;
+    uint32_t w = 1280, h = 720;
+    vaCreateSurfaces(va_dpy, VA_RT_FORMAT_YUV420, w, h, &surf_id, 1, nullptr, 0);
+    CHECK_VASTATUS(va_status, "vaCreateSurfaces", 6);
+
+    VAContextID ctx_id;
+    va_status = vaCreateContext(va_dpy, config_id, w, h, VA_PROGRESSIVE, &surf_id, 1, &ctx_id);
+    CHECK_VASTATUS(va_status, "vaCreateContext", 6);
+
+    uint32_t filter_num = VAProcFilterCount;
+    vector<VAProcFilterType> filter_list(filter_num);
+    va_status = vaQueryVideoProcFilters(va_dpy, ctx_id, filter_list.data(), &filter_num);
+    CHECK_VASTATUS(va_status, "vaQueryVideoProcFilters", 6);
+
+    for (auto f: filter_list) {
+        uint32_t caps_num = 0;
+        uint8_t caps_data[1024]; 
+        vaQueryVideoProcFilterCaps(va_dpy, ctx_id, f, caps_data, &caps_num);
+        printf("####LOG: filter_type = %d, caps_num = %d\n", f, caps_num);
+    }
+
+    VAProcPipelineCaps pipeline_caps = {};
+    va_status = vaQueryVideoProcPipelineCaps(va_dpy, ctx_id, nullptr, 0, &pipeline_caps);
+    CHECK_VASTATUS(va_status, "vaQueryVideoProcPipelineCaps", 6);
+    printf("####LOG: size of VAProcPipelineCaps = %d\n", sizeof(pipeline_caps));
+
     closeVADisplay();
 
     printf("done\n");
