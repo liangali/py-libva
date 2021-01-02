@@ -419,11 +419,13 @@ std::vector<const char*> getProfiles()
     if (va_status != VA_STATUS_SUCCESS) {
         return profile_list;
     }
-
+    
+    int profile_index = 0;
     for (auto p : profile_full) {
-        if (p != VAProfileNone) {
+        if (profile_index < num_profiles) {
             profile_list.push_back(profile_map[p]);
         }
+        profile_index++;
     }
 
     return profile_list;
