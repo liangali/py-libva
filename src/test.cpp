@@ -102,6 +102,7 @@ int main()
     attrib.type = VAConfigAttribRTFormat;
     va_status = vaGetConfigAttributes(va_dpy, VAProfileNone, VAEntrypointVideoProc, &attrib, 1);
     CHECK_VASTATUS(va_status, "vaGetConfigAttributes", 6);
+    printf("####LOG: VideoProc Attrib type = %d, value = 0x%08x\n", attrib.type, attrib.value);
 
     VAConfigID config_id = 0;
     va_status = vaCreateConfig(va_dpy, VAProfileNone, VAEntrypointVideoProc, &attrib, 1, &config_id);

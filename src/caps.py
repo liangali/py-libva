@@ -18,11 +18,11 @@ for p in pl:
         va_caps[p][e] = json.loads(json.dumps(al))
 
 va_caps_json = json.dumps(va_caps)
-with open('../caps.json', 'wt') as f:
+with open('../../caps.json', 'wt') as f:
     f.writelines(va_caps_json)
 
 html = json2html.convert(json=va_caps_json)
-with open('../caps.html', 'wt') as f:
+with open('../../caps.html', 'wt') as f:
     f.writelines(html)
 
 pylibva.close()

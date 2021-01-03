@@ -117,6 +117,20 @@ static std::map<VAConfigAttribType, const char*> configattrib_map =
     VA_ENUM_STR_MAP(VAConfigAttribTypeMax)
 };
 
+static std::map<VASurfaceAttribType, const char*> surfaceattrib_map = 
+{
+    VA_ENUM_STR_MAP(VASurfaceAttribNone), 
+    VA_ENUM_STR_MAP(VASurfaceAttribPixelFormat), 
+    VA_ENUM_STR_MAP(VASurfaceAttribMinWidth), 
+    VA_ENUM_STR_MAP(VASurfaceAttribMaxWidth), 
+    VA_ENUM_STR_MAP(VASurfaceAttribMinHeight), 
+    VA_ENUM_STR_MAP(VASurfaceAttribMaxHeight), 
+    VA_ENUM_STR_MAP(VASurfaceAttribMemoryType), 
+    VA_ENUM_STR_MAP(VASurfaceAttribExternalBufferDescriptor), 
+    VA_ENUM_STR_MAP(VASurfaceAttribUsageHint), 
+    VA_ENUM_STR_MAP(VASurfaceAttribCount)
+};
+
 #define ADD_ATTRIB_STR(type) if (value & type) result.push_back(#type)
 #define ADD_ATTRIB_VALUE()
 
@@ -330,6 +344,16 @@ std::vector<const char*> parseConfig(VAConfigAttribType type, int value)
         return result;
 }
 
+std::vector<const char*> parseSurfaceAttrib(VASurfaceAttrib sa)
+{
+    char *str = new char[256];
+    sprintf(str, "0x%08x", sa.value.value.i);
+    std::vector<const char*> result;
+
+    result.push_back(str);
+
+    return result;
+}
 VAProfile str2Profile(const char* str)
 {
     for(auto m : profile_map) {
@@ -460,26 +484,57 @@ std::map<const char*, std::vector<const char*>> getConfigs(const char* profile_s
     VAProfile profile = str2Profile(profile_str);
     VAEntrypoint entrypoint = str2Entrypoint(entrypoint_str);
 
-    int max_num_attributes = vaMaxNumConfigAttributes(va_dpy);
-    std::vector<VAConfigAttrib> attrib_list(max_num_attributes);
-    for (size_t i = 0; i < max_num_attributes; i++) {
-        attrib_list[i].type = (VAConfigAttribType)i;
-    }
+    if (profile == VAProfileNone && entrypoint == VAEntrypointVideoProc) {
+        VAConfigAttrib attrib = {};
+        attrib.type = VAConfigAttribRTFormat;
+        va_status = vaGetConfigAttributes(va_dpy, VAProfileNone, VAEntrypointVideoProc, &attrib, 1);
+        if (va_status != VA_STATUS_SUCCESS) {
+            return config_list; 
+        }
 
-    va_status = vaGetConfigAttributes(va_dpy, profile, entrypoint, attrib_list.data(), max_num_attributes);
-    if (VA_STATUS_ERROR_UNSUPPORTED_PROFILE == va_status || 
-        VA_STATUS_ERROR_UNSUPPORTED_ENTRYPOINT == va_status ) {
-        return config_list;
-    }
+        VAConfigID config_id = 0;
+        va_status = vaCreateConfig(va_dpy, VAProfileNone, VAEntrypointVideoProc, &attrib, 1, &config_id);
+        if (va_status != VA_STATUS_SUCCESS) {
+            return config_list; 
+        }
 
-    for (auto a: attrib_list) {
-        if (a.value != VA_ATTRIB_NOT_SUPPORTED) {
-            std::vector<const char*> value_list(2);
-            config_list[configattrib_map[a.type]] = parseConfig(a.type, a.value);
-            //printf("####INFO: type = %-40s, value = 0x%08x\n", configattrib_map[a.type], a.value);
+        uint32_t num_surf_attribs = 0;
+        va_status = vaQuerySurfaceAttributes(va_dpy, config_id, nullptr, &num_surf_attribs);
+        if (va_status != VA_STATUS_SUCCESS) {
+            return config_list; 
+        }
+
+        std::vector<VASurfaceAttrib> surf_attribs(num_surf_attribs);
+        va_status = vaQuerySurfaceAttributes(va_dpy, config_id, surf_attribs.data(), &num_surf_attribs);
+        if (va_status != VA_STATUS_SUCCESS) {
+            return config_list; 
+        }
+
+        for (auto a: surf_attribs) {
+            config_list[surfaceattrib_map[a.type]] = parseSurfaceAttrib(a);
+            printf("####LOG: type = %d, flags = 0x%08x, value = 0x%0x8\n", a.type, a.flags, a.value.value.i);
+        }
+    } else {
+        int max_num_attributes = vaMaxNumConfigAttributes(va_dpy);
+        std::vector<VAConfigAttrib> attrib_list(max_num_attributes);
+        for (size_t i = 0; i < max_num_attributes; i++) {
+            attrib_list[i].type = (VAConfigAttribType)i;
+        }
+    
+        va_status = vaGetConfigAttributes(va_dpy, profile, entrypoint, attrib_list.data(), max_num_attributes);
+        if (VA_STATUS_ERROR_UNSUPPORTED_PROFILE == va_status || 
+            VA_STATUS_ERROR_UNSUPPORTED_ENTRYPOINT == va_status ) {
+            return config_list;
+        }
+    
+        for (auto a: attrib_list) {
+            if (a.value != VA_ATTRIB_NOT_SUPPORTED) {
+                config_list[configattrib_map[a.type]] = parseConfig(a.type, a.value);
+                //printf("####INFO: type = %-40s, value = 0x%08x\n", configattrib_map[a.type], a.value);
+            }
         }
     }
-
+    
     return config_list;
 }
 
