@@ -344,15 +344,11 @@ std::vector<const char*> parseConfig(VAConfigAttribType type, int value)
         return result;
 }
 
-std::vector<const char*> parseSurfaceAttrib(VASurfaceAttrib sa)
+void parseSurfaceAttrib(VASurfaceAttrib sa, std::vector<const char*> & v)
 {
     char *str = new char[256];
     sprintf(str, "0x%08x", sa.value.value.i);
-    std::vector<const char*> result;
-
-    result.push_back(str);
-
-    return result;
+    v.push_back(str);
 }
 VAProfile str2Profile(const char* str)
 {
@@ -511,8 +507,13 @@ std::map<const char*, std::vector<const char*>> getConfigs(const char* profile_s
         }
 
         for (auto a: surf_attribs) {
-            config_list[surfaceattrib_map[a.type]] = parseSurfaceAttrib(a);
-            printf("####LOG: type = %d, flags = 0x%08x, value = 0x%0x8\n", a.type, a.flags, a.value.value.i);
+            auto ret = config_list.insert(
+                std::pair<const char*, std::vector<const char*>>(
+                    surfaceattrib_map[a.type], std::vector<const char*>()
+                )
+            );
+            parseSurfaceAttrib(a, ret.first->second);
+            //printf("####LOG: type = %d, flags = 0x%08x, value = 0x%0x8\n", a.type, a.flags, a.value.value.i);
         }
     } else {
         int max_num_attributes = vaMaxNumConfigAttributes(va_dpy);
