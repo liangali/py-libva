@@ -6,6 +6,8 @@
 #include <unistd.h>
 #include <fcntl.h>
 
+#include <iostream>
+#include <string>
 #include <vector>
 #include <map>
 
@@ -344,11 +346,55 @@ std::vector<const char*> parseConfig(VAConfigAttribType type, int value)
         return result;
 }
 
-void parseSurfaceAttrib(VASurfaceAttrib sa, std::vector<const char*> & v)
+void parseSurfaceAttrib(VASurfaceAttrib sa, std::vector<const char*> & result)
 {
     char *str = new char[256];
+    int value = sa.value.value.i;
+    char* p = (char*)&sa.value.value.i;
     sprintf(str, "0x%08x", sa.value.value.i);
-    v.push_back(str);
+
+    switch (sa.type)
+    {
+    case VASurfaceAttribPixelFormat:
+        sprintf(str, "VA_FOURCC_%c%c%c%c", p[0], p[1], p[2], p[3]);
+        result.push_back(str);
+        break;
+    case VASurfaceAttribMinWidth:
+        sprintf(str, "%d", sa.value.value.i);
+        result.push_back(str);
+        break;
+    case VASurfaceAttribMaxWidth:
+        sprintf(str, "%d", sa.value.value.i);
+        result.push_back(str);
+        break;
+    case VASurfaceAttribMinHeight:
+        sprintf(str, "%d", sa.value.value.i);
+        result.push_back(str);
+        break;
+    case VASurfaceAttribMaxHeight:
+        sprintf(str, "%d", sa.value.value.i);
+        result.push_back(str);
+        break;
+    case VASurfaceAttribMemoryType:
+        ADD_ATTRIB_STR(VA_SURFACE_ATTRIB_MEM_TYPE_VA);
+        ADD_ATTRIB_STR(VA_SURFACE_ATTRIB_MEM_TYPE_V4L2);
+        ADD_ATTRIB_STR(VA_SURFACE_ATTRIB_MEM_TYPE_USER_PTR);
+        break;
+    case VASurfaceAttribExternalBufferDescriptor:
+        result.push_back(str);
+        break;
+    case VASurfaceAttribUsageHint:
+        ADD_ATTRIB_STR(VA_SURFACE_ATTRIB_USAGE_HINT_GENERIC);
+        ADD_ATTRIB_STR(VA_SURFACE_ATTRIB_USAGE_HINT_DECODER);
+        ADD_ATTRIB_STR(VA_SURFACE_ATTRIB_USAGE_HINT_ENCODER);
+        ADD_ATTRIB_STR(VA_SURFACE_ATTRIB_USAGE_HINT_VPP_READ);
+        ADD_ATTRIB_STR(VA_SURFACE_ATTRIB_USAGE_HINT_VPP_WRITE);
+        ADD_ATTRIB_STR(VA_SURFACE_ATTRIB_USAGE_HINT_DISPLAY);
+        ADD_ATTRIB_STR(VA_SURFACE_ATTRIB_USAGE_HINT_EXPORT);
+        break;
+    default:
+        break;
+    }
 }
 VAProfile str2Profile(const char* str)
 {
