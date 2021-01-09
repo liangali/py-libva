@@ -65,11 +65,10 @@ void closeVADisplay()
     drm_fd = -1;
 }
 
-int main() 
+int test_caps() 
 {
     int major_ver, minor_ver;
     VAStatus va_status;
-    unsigned int i;
     int ret_val = 0;
     
     va_dpy = getVADisplay();
@@ -146,5 +145,30 @@ int main()
     closeVADisplay();
 
     printf("done\n");
+    return 0;
+}
+
+int test_vpp()
+{
+    int major_ver, minor_ver;
+    VAStatus va_status;
+    int ret_val = 0;
+    
+    va_dpy = getVADisplay();
+    printf("####INFO: va_dpy = %x, va_dpy = %d\n", va_dpy, va_dpy);
+    va_status = vaInitialize(va_dpy, &major_ver, &minor_ver);
+
+
+    closeVADisplay();
+    printf("done\n");
+    return 0;
+}
+
+int main()
+{
+    //test_caps();
+
+    test_vpp();
+
     return 0;
 }
