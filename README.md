@@ -10,6 +10,12 @@ sudo pip3 install json2html
 # note: if need proxy, add "--proxy https://xxx.xxx.xxx:port" in cmd line
 ```
 
+set environment variables
+```bash
+python3 gen_env.sh
+source env.sh
+```
+
 build python binding so
 ```bash
 cd py-libva
