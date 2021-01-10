@@ -461,7 +461,7 @@ uint64_t vaInit()
     int major_ver, minor_ver;
 
     va_dpy = getVADisplay();
-    printf("####INFO: va_dpy = 0x%x, %d\n", va_dpy, va_dpy);
+    //printf("####INFO: va_dpy = 0x%x, %d\n", va_dpy, va_dpy);
 
     va_status = vaInitialize(va_dpy, &major_ver, &minor_ver);
 
@@ -473,7 +473,7 @@ std::vector<const char*> getProfiles()
     std::vector<const char*> profile_list;
 
     int max_num_profiles = vaMaxNumProfiles(va_dpy);
-    printf("####INFO: max_num_profiles = %d\n", max_num_profiles);
+    //printf("####INFO: max_num_profiles = %d\n", max_num_profiles);
     if (max_num_profiles <= 0) {
         return profile_list;
     }
@@ -481,7 +481,7 @@ std::vector<const char*> getProfiles()
     int num_profiles = 0;
     std::vector<VAProfile> profile_full(max_num_profiles, VAProfileNone);
     va_status = vaQueryConfigProfiles(va_dpy, (VAProfile*)profile_full.data(), &num_profiles);
-    printf("####INFO: num_profiles = %d\n", num_profiles);
+    //printf("####INFO: num_profiles = %d\n", num_profiles);
     if (va_status != VA_STATUS_SUCCESS) {
         return profile_list;
     }
@@ -559,7 +559,7 @@ std::map<const char*, std::vector<const char*>> getConfigs(const char* profile_s
                 )
             );
             parseSurfaceAttrib(a, ret.first->second);
-            //printf("####LOG: type = %d, flags = 0x%08x, value = 0x%0x8\n", a.type, a.flags, a.value.value.i);
+            //printf("####INFO: type = %d, flags = 0x%08x, value = 0x%0x8\n", a.type, a.flags, a.value.value.i);
         }
     } else {
         int max_num_attributes = vaMaxNumConfigAttributes(va_dpy);
