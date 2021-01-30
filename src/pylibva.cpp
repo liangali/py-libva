@@ -440,11 +440,6 @@ VADisplay getVADisplay(void)
     return NULL;
 }
 
-int add(int i, int j) 
-{
-    return i + j;
-}
-
 void vaClose()
 {
     vaTerminate(va_dpy);
@@ -585,13 +580,38 @@ std::map<const char*, std::vector<const char*>> getConfigs(const char* profile_s
     return config_list;
 }
 
+uint32_t createSurface(uint32_t width, uint32_t height, const char* format, uint32_t numSurf=1)
+{
+    VASurfaceID surfID = VA_INVALID_ID;
+    uint32_t fourcc  = VA_FOURCC('N','V','1','2');
+    uint32_t formatRT  = VA_RT_FORMAT_YUV420;
+    VASurfaceAttrib surf_attrib = {};
+    surf_attrib.type =  VASurfaceAttribPixelFormat;
+    surf_attrib.flags = VA_SURFACE_ATTRIB_SETTABLE;
+    surf_attrib.value.type = VAGenericValueTypeInteger;
+    surf_attrib.value.value.i = fourcc;
+    va_status = vaCreateSurfaces(va_dpy, formatRT, width, height, &surfID, numSurf, &surf_attrib, 1);
+    if (va_status != VA_STATUS_SUCCESS) {
+        printf("ERROR: vaCreateSurfaces failed\n");
+        return VA_INVALID_ID; 
+    }
+    return surfID;
+}
+
+void destorySurface(VASurfaceID surfID, uint32_t numSurf=1)
+{
+    vaDestroySurfaces(va_dpy, &surfID, numSurf);
+}
+
+
 PYBIND11_MODULE(pylibva, m) {
     m.doc() = "libva python bindings"; // optional module docstring
-    m.def("add", &add, "A function which adds two numbers");
     m.def("init", &vaInit, "Initialize VADisplay");
     m.def("close", &vaClose, "Close VADisplay and drm fd");
     m.def("profiles", &getProfiles, "Query supported profiles");
     m.def("entrypoints", &getEntrypoints, "Query supported entrypoints for a given profile");
-    m.def("configs", &getConfigs, "Get attributes for a given profile/entrypoint pair ");
+    m.def("configs", &getConfigs, "Get attributes for a given profile/entrypoint pair");
+    m.def("create_surface", &createSurface, "Create VASurface");
+    m.def("destroy_surface", &destorySurface, "Destroy VASurface");
 }
 

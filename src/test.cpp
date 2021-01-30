@@ -257,8 +257,8 @@ int test_vpp()
     uint32_t dsth = 480;
     uint32_t src_fourcc  = VA_FOURCC('N','V','1','2');
     uint32_t dst_fourcc  = VA_FOURCC('N','V','1','2'); //VA_FOURCC('I','4','2','0');
-    static uint32_t src_format  = VA_RT_FORMAT_YUV420;
-    static uint32_t dst_format  = VA_RT_FORMAT_YUV420;
+    uint32_t src_format  = VA_RT_FORMAT_YUV420;
+    uint32_t dst_format  = VA_RT_FORMAT_YUV420;
     VASurfaceID src_surf = VA_INVALID_ID;
     VASurfaceID dst_surf = VA_INVALID_ID;
     
