@@ -603,6 +603,45 @@ void destorySurface(VASurfaceID surfID, uint32_t numSurf=1)
     vaDestroySurfaces(va_dpy, &surfID, numSurf);
 }
 
+std::map<const char*, uint64_t> querySurfaceInfo(VASurfaceID surfID)
+{
+    std::map<const char*, uint64_t> surfInfo;
+    VAImage img = {};
+    va_status = vaDeriveImage(va_dpy, surfID, &img);
+    if (va_status != VA_STATUS_SUCCESS) {
+        printf("ERROR: vaCreateSurfaces failed\n");
+        return surfInfo; 
+    }
+
+    surfInfo["image_id"] = img.image_id;
+    surfInfo["buf_id"] = img.buf;
+    surfInfo["fourcc"] = img.format.fourcc;
+    surfInfo["byte_order"] = img.format.byte_order;
+    surfInfo["bits_per_pixel"] = img.format.bits_per_pixel;
+    surfInfo["depth"] = img.format.depth;
+    surfInfo["red_mask"] = img.format.red_mask;
+    surfInfo["green_mask"] = img.format.green_mask;
+    surfInfo["blue_mask"] = img.format.blue_mask;
+    surfInfo["alpha_mask"] = img.format.alpha_mask;
+    surfInfo["width"] = img.width;
+    surfInfo["height"] = img.height;
+    surfInfo["data_size"] = img.data_size;
+    surfInfo["num_planes"] = img.num_planes;
+    surfInfo["pitch[0]"] = img.pitches[0];
+    surfInfo["pitch[1]"] = img.pitches[1];
+    surfInfo["pitch[2]"] = img.pitches[2];
+    surfInfo["offset[0]"] = img.offsets[0];
+    surfInfo["offset[1]"] = img.offsets[1];
+    surfInfo["offset[2]"] = img.offsets[2];
+    surfInfo["num_palette_entries"] = img.num_palette_entries;
+    surfInfo["entry_bytes"] = img.entry_bytes;
+    surfInfo["order[0]"] = img.component_order[0];
+    surfInfo["order[1]"] = img.component_order[1];
+    surfInfo["order[2]"] = img.component_order[2];
+    surfInfo["order[3]"] = img.component_order[3];
+    vaDestroyImage(va_dpy, img.image_id);
+    return surfInfo;
+}
 
 PYBIND11_MODULE(pylibva, m) {
     m.doc() = "libva python bindings"; // optional module docstring
@@ -613,5 +652,6 @@ PYBIND11_MODULE(pylibva, m) {
     m.def("configs", &getConfigs, "Get attributes for a given profile/entrypoint pair");
     m.def("create_surface", &createSurface, "Create VASurface");
     m.def("destroy_surface", &destorySurface, "Destroy VASurface");
+    m.def("query_info", &querySurfaceInfo, "Destroy VASurface");
 }
 
