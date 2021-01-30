@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <assert.h>
@@ -148,6 +149,32 @@ int test_caps()
     return 0;
 }
 
+void printVAImage(VAImage &img)
+{
+    printf("\nVAImage: ================\n");
+    printf("VAImage: image_id = %d\n", img.image_id);
+    printf("VAImage: buf_id   = %d\n", img.buf);
+    printf("VAImage: format: \n");
+    printf("            fourcc         = 0x%08x\n", img.format.fourcc);
+    printf("            byte_order     = %d\n", img.format.byte_order);
+    printf("            bits_per_pixel = %d\n", img.format.bits_per_pixel);
+    printf("            depth          = %d\n", img.format.depth);
+    printf("            red_mask       = %d\n", img.format.red_mask);
+    printf("            green_mask     = %d\n", img.format.green_mask);
+    printf("            blue_mask      = %d\n", img.format.blue_mask);
+    printf("            alpha_mask     = %d\n", img.format.alpha_mask);
+    printf("VAImage: width = %d\n", img.width);
+    printf("VAImage: height = %d\n", img.height);
+    printf("VAImage: data_size = %d\n", img.data_size);
+    printf("VAImage: num_planes = %d\n", img.num_planes);
+    printf("VAImage: pitches = [%d, %d, %d]\n", img.pitches[0], img.pitches[1], img.pitches[2]);
+    printf("VAImage: offsets = [%d, %d, %d]\n", img.offsets[0], img.offsets[1], img.offsets[2]);
+    printf("VAImage: num_palette_entries = %d\n", img.num_palette_entries);
+    printf("VAImage: entry_bytes = %d\n", img.entry_bytes);
+    printf("VAImage: component_order = [%d, %d, %d, %d]\n", img.component_order[0], img.component_order[1], img.component_order[2], img.component_order[3]);
+    printf("VAImage: ================\n");
+}
+
 int upload_surface(VASurfaceID surf_id)
 {
     VAImage va_img = {};
@@ -155,10 +182,29 @@ int upload_surface(VASurfaceID surf_id)
 
     va_status = vaDeriveImage(va_dpy, surf_id, &va_img);
     CHECK_VASTATUS(va_status, "vaDeriveImage", 1);
+    printVAImage(va_img);
+    uint16_t w = va_img.width;
+    uint16_t h = va_img.height;
+    uint32_t pitch = va_img.pitches[0];
+    uint32_t uv_offset = va_img.offsets[1];
 
     va_status = vaMapBuffer(va_dpy, va_img.buf, &surf_ptr);
     CHECK_VASTATUS(va_status, "vaMapBuffer", 1);
 
+    vector<char> src(w*h*3/2, 0);
+    char* dst = (char*)surf_ptr;
+    FILE* fp = fopen("../../test.nv12", "rb");
+    fread(src.data(), w*h*3/2, 1, fp);
+    fclose(fp);
+
+    memset(dst, 0, va_img.data_size);
+    // Y plane
+    for (size_t i = 0; i < h; i++)
+        memcpy(dst+i*pitch, src.data()+i*w, w);
+    // UV plane
+    for (size_t i = 0; i < h/2; i++)
+        memcpy(dst+ uv_offset + i*pitch, src.data()+(h+i)*w, w);
+    
     vaUnmapBuffer(va_dpy, va_img.buf);
     vaDestroyImage(va_dpy, va_img.image_id);
 
@@ -172,9 +218,28 @@ int save_surface(VASurfaceID surf_id)
 
     va_status = vaDeriveImage(va_dpy, surf_id, &va_img);
     CHECK_VASTATUS(va_status, "vaDeriveImage", 1);
-
+    uint16_t w = va_img.width;
+    uint16_t h = va_img.height;
+    uint32_t pitch = va_img.pitches[0];
+    uint32_t uv_offset = va_img.offsets[1];
+    printVAImage(va_img);
+    
     va_status = vaMapBuffer(va_dpy, va_img.buf, &surf_ptr);
     CHECK_VASTATUS(va_status, "vaMapBuffer", 1);
+
+    char* src = (char*)surf_ptr;
+    vector<char> dst(w*h*3/2, 0);
+
+    // Y plane
+    for (size_t i = 0; i < h; i++)
+        memcpy(dst.data()+i*w, src+i*pitch, w);
+    // UV plane
+    for (size_t i = 0; i < h/2; i++)
+        memcpy(dst.data()+(h+i)*w, src+uv_offset+i*pitch, w);
+
+    FILE* fp = fopen("../../test.out.nv12", "wb");
+    fwrite(dst.data(), w*h*3/2, 1, fp);
+    fclose(fp);
 
     vaUnmapBuffer(va_dpy, va_img.buf);
     vaDestroyImage(va_dpy, va_img.image_id);
@@ -186,12 +251,12 @@ int test_vpp()
 {
     int major_ver, minor_ver;
 
-    uint32_t srcw = 640;
-    uint32_t srch = 480;
-    uint32_t dstw = 720;
+    uint32_t srcw = 320;
+    uint32_t srch = 240;
+    uint32_t dstw = 640;
     uint32_t dsth = 480;
     uint32_t src_fourcc  = VA_FOURCC('N','V','1','2');
-    uint32_t dst_fourcc  = VA_FOURCC('I','4','2','0');
+    uint32_t dst_fourcc  = VA_FOURCC('N','V','1','2'); //VA_FOURCC('I','4','2','0');
     static uint32_t src_format  = VA_RT_FORMAT_YUV420;
     static uint32_t dst_format  = VA_RT_FORMAT_YUV420;
     VASurfaceID src_surf = VA_INVALID_ID;
