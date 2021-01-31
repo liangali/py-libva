@@ -1,6 +1,5 @@
 import sys
 sys.path.append('../build')
-sys.path.append('py-libva/build')
 import pylibva as pyva
 
 pyva.init()
