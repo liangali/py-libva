@@ -133,6 +133,28 @@ static std::map<VASurfaceAttribType, const char*> surfaceattrib_map =
     VA_ENUM_STR_MAP(VASurfaceAttribCount)
 };
 
+static std::map<const char*, uint32_t> rtformat_map = 
+{
+    {"VA_RT_FORMAT_YUV420", 0x00000001}, 
+    {"VA_RT_FORMAT_YUV422", 0x00000002}, 
+    {"VA_RT_FORMAT_YUV444", 0x00000004}, 
+    {"VA_RT_FORMAT_YUV411", 0x00000008}, 
+    {"VA_RT_FORMAT_YUV400", 0x00000010}, 
+    {"VA_RT_FORMAT_YUV420_10", 0x00000100}, 
+    {"VA_RT_FORMAT_YUV422_10", 0x00000200}, 
+    {"VA_RT_FORMAT_YUV444_10", 0x00000400}, 
+    {"VA_RT_FORMAT_YUV420_12", 0x00001000}, 
+    {"VA_RT_FORMAT_YUV422_12", 0x00002000}, 
+    {"VA_RT_FORMAT_YUV444_12", 0x00004000}, 
+    {"VA_RT_FORMAT_RGB16", 0x00010000}, 
+    {"VA_RT_FORMAT_RGB32", 0x00020000}, 
+    {"VA_RT_FORMAT_RGBP", 0x00100000}, 
+    {"VA_RT_FORMAT_RGB32_10", 0x00200000}, 
+    {"VA_RT_FORMAT_PROTECTED", 0x80000000}, 
+    {"VA_RT_FORMAT_RGB32_10BPP", 0x00200000}, 
+    {"VA_RT_FORMAT_YUV420_10BPP", 0x00000100}
+};
+
 #define ADD_ATTRIB_STR(type) if (value & type) result.push_back(#type)
 #define ADD_ATTRIB_VALUE()
 
@@ -416,6 +438,18 @@ VAEntrypoint str2Entrypoint(const char* str)
     return VAEntrypointVLD;
 }
 
+uint32_t str2RTFormat(const char* str)
+{
+    uint32_t result = 0;
+    for (auto m: rtformat_map) {
+        if (strcmp(str, m.first) == 0) {
+            result = m.second;
+            break;
+        }
+    }
+    return result;
+}
+
 VADisplay getVADisplay(void)
 {
     const char *drm_device_paths[] = {
@@ -580,17 +614,31 @@ std::map<const char*, std::vector<const char*>> getConfigs(const char* profile_s
     return config_list;
 }
 
+std::vector<const char*> getRTFormat()
+{
+    std::vector<const char*> rtformat_list;
+    for (auto m: rtformat_map) {
+        rtformat_list.push_back(m.first);
+    }
+    return rtformat_list;
+}
+
 uint32_t createSurface(uint32_t width, uint32_t height, const char* format, uint32_t numSurf=1)
 {
     VASurfaceID surfID = VA_INVALID_ID;
-    uint32_t fourcc  = VA_FOURCC('N','V','1','2');
-    uint32_t formatRT  = VA_RT_FORMAT_YUV420;
-    VASurfaceAttrib surf_attrib = {};
-    surf_attrib.type =  VASurfaceAttribPixelFormat;
-    surf_attrib.flags = VA_SURFACE_ATTRIB_SETTABLE;
-    surf_attrib.value.type = VAGenericValueTypeInteger;
-    surf_attrib.value.value.i = fourcc;
-    va_status = vaCreateSurfaces(va_dpy, formatRT, width, height, &surfID, numSurf, &surf_attrib, 1);
+    uint32_t formatRT  = str2RTFormat(format); // VA_RT_FORMAT_YUV420;
+    if (formatRT == 0) {
+        printf("ERROR: Invalid RT format %s \n", format);
+        return VA_INVALID_ID;
+    }
+    
+    // uint32_t fourcc  = VA_FOURCC('N','V','1','2');
+    // VASurfaceAttrib surf_attrib = {};
+    // surf_attrib.type =  VASurfaceAttribPixelFormat;
+    // surf_attrib.flags = VA_SURFACE_ATTRIB_SETTABLE;
+    // surf_attrib.value.type = VAGenericValueTypeInteger;
+    // surf_attrib.value.value.i = fourcc;
+    va_status = vaCreateSurfaces(va_dpy, formatRT, width, height, &surfID, numSurf, nullptr, 0);
     if (va_status != VA_STATUS_SUCCESS) {
         printf("ERROR: vaCreateSurfaces failed\n");
         return VA_INVALID_ID; 
@@ -650,6 +698,8 @@ PYBIND11_MODULE(pylibva, m) {
     m.def("profiles", &getProfiles, "Query supported profiles");
     m.def("entrypoints", &getEntrypoints, "Query supported entrypoints for a given profile");
     m.def("configs", &getConfigs, "Get attributes for a given profile/entrypoint pair");
+
+    m.def("get_rtformat", &getRTFormat, "Get RT format list");
     m.def("create_surface", &createSurface, "Create VASurface");
     m.def("destroy_surface", &destorySurface, "Destroy VASurface");
     m.def("query_info", &querySurfaceInfo, "Destroy VASurface");

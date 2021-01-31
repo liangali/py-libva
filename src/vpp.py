@@ -1,16 +1,15 @@
 import sys
 sys.path.append('../build')
 sys.path.append('py-libva/build')
-import pylibva
+import pylibva as pyva
 
-pylibva.init()
+pyva.init()
 
+rtformtats = pyva.get_rtformat()
 
-surf = pylibva.create_surface(640, 480, "NV12", 1)
+surf = pyva.create_surface(640, 480, "VA_RT_FORMAT_YUV420", 1)
+print(pyva.query_info(surf))
+pyva.destroy_surface(surf, 1)
 
-print(pylibva.query_info(surf))
-
-pylibva.destroy_surface(surf, 1)
-
-pylibva.close()
+pyva.close()
 print('done')
