@@ -695,6 +695,7 @@ PYBIND11_MODULE(pylibva, m) {
     m.doc() = "libva python bindings"; // optional module docstring
     m.def("init", &vaInit, "Initialize VADisplay");
     m.def("close", &vaClose, "Close VADisplay and drm fd");
+
     m.def("profiles", &getProfiles, "Query supported profiles");
     m.def("entrypoints", &getEntrypoints, "Query supported entrypoints for a given profile");
     m.def("configs", &getConfigs, "Get attributes for a given profile/entrypoint pair");
