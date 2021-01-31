@@ -2,18 +2,18 @@ import sys
 sys.path.append('../build')
 
 import json
-import pylibva
+import pylibva as pyva
 from json2html import *
 
-pylibva.init()
+pyva.init()
 
 va_caps = {}
-pl = pylibva.profiles()
+pl = pyva.profiles()
 for p in pl:
     va_caps[p] = {}
-    el = pylibva.entrypoints(p)
+    el = pyva.entrypoints(p)
     for e in el:
-        al = pylibva.configs(p, e)
+        al = pyva.configs(p, e)
         va_caps[p][e] = json.loads(json.dumps(al))
 
 va_caps_json = json.dumps(va_caps)
@@ -24,5 +24,5 @@ html = json2html.convert(json=va_caps_json)
 with open('../../caps.html', 'wt') as f:
     f.writelines(html)
 
-pylibva.close()
+pyva.close()
 print('done')
