@@ -1,5 +1,6 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include <pybind11/numpy.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,6 +14,8 @@
 
 #include <va/va.h>
 #include <va/va_drm.h>
+
+namespace py = pybind11;
 
 static VAStatus va_status;
 static VADisplay va_dpy = NULL;
@@ -651,17 +654,95 @@ void destorySurface(VASurfaceID surfID, uint32_t numSurf=1)
     vaDestroySurfaces(va_dpy, &surfID, numSurf);
 }
 
-int readSurface(VASurfaceID surfID)
+py::array readSurface(VASurfaceID surf_id)
 {
-    return va_status; 
+    VAImage va_img = {};
+    void *surf_ptr = nullptr;
+
+    va_status = vaDeriveImage(va_dpy, surf_id, &va_img);
+    if (va_status != VA_STATUS_SUCCESS) {
+        printf("ERROR: vaDeriveImage failed\n");
+        exit(1);
+    }
+
+    uint16_t w = va_img.width;
+    uint16_t h = va_img.height;
+    uint32_t pitch = va_img.pitches[0];
+    uint32_t uv_offset = va_img.offsets[1];
+    
+    va_status = vaMapBuffer(va_dpy, va_img.buf, &surf_ptr);
+    if (va_status != VA_STATUS_SUCCESS) {
+        printf("ERROR: vaMapBuffer failed\n");
+        exit(1);
+    }
+
+    char* src = (char*)surf_ptr;
+    std::vector<char> dst(w*h*3/2, 0);
+
+    // Y plane
+    for (size_t i = 0; i < h; i++)
+        memcpy(dst.data()+i*w, src+i*pitch, w);
+    // UV plane
+    for (size_t i = 0; i < h/2; i++)
+        memcpy(dst.data()+(h+i)*w, src+uv_offset+i*pitch, w);
+
+    vaUnmapBuffer(va_dpy, va_img.buf);
+    vaDestroyImage(va_dpy, va_img.image_id);
+
+    ssize_t ndim    = 2;
+    std::vector<ssize_t> shape   = { h*3/2 , w };
+    std::vector<ssize_t> strides = { w , sizeof(uint8_t) };
+
+    // return 2-D NumPy array
+    return py::array(
+        py::buffer_info(
+        dst.data(),                               /* data as contiguous array  */
+        sizeof(uint8_t),                          /* size of one scalar        */
+        py::format_descriptor<uint8_t>::format(), /* data type                 */
+        ndim,                                     /* number of dimensions      */
+        shape,                                    /* shape of the matrix       */
+        strides                                   /* strides for each axis     */
+        )
+    );
 }
 
-int writeSurface(VASurfaceID surfID, vector<int32_t> indata)
+int writeSurface(VASurfaceID surf_id, py::array_t<uint8_t, py::array::c_style | py::array::forcecast> indata)
 {
-    for (size_t i = 0; i < 256; i++)
-    {
-        printf("%d, ", indata[i]);
+    printf("ndim = %d, size = %dx%d\n", indata.ndim(), indata.shape()[1], indata.shape()[0]);
+
+    VAImage va_img = {};
+    void *surf_ptr = nullptr;
+
+    va_status = vaDeriveImage(va_dpy, surf_id, &va_img);
+    if (va_status != VA_STATUS_SUCCESS) {
+        printf("ERROR: vaDeriveImage failed\n");
+        return va_status; 
     }
+
+    uint16_t w = va_img.width;
+    uint16_t h = va_img.height;
+    uint32_t pitch = va_img.pitches[0];
+    uint32_t uv_offset = va_img.offsets[1];
+
+    va_status = vaMapBuffer(va_dpy, va_img.buf, &surf_ptr);
+    if (va_status != VA_STATUS_SUCCESS) {
+        printf("ERROR: vaMapBuffer failed\n");
+        return va_status; 
+    }
+    char* src = (char*)indata.data();
+    char* dst = (char*)surf_ptr;
+    memset(dst, 0, va_img.data_size);
+
+    // Y plane
+    for (size_t i = 0; i < h; i++)
+        memcpy(dst+i*pitch, src+i*w, w);
+
+    // UV plane
+    for (size_t i = 0; i < h/2; i++)
+        memcpy(dst+uv_offset + i*pitch, src+(h+i)*w, w);
+    
+    vaUnmapBuffer(va_dpy, va_img.buf);
+    vaDestroyImage(va_dpy, va_img.image_id);
     
     return va_status; 
 }
