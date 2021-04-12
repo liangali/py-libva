@@ -651,6 +651,21 @@ void destorySurface(VASurfaceID surfID, uint32_t numSurf=1)
     vaDestroySurfaces(va_dpy, &surfID, numSurf);
 }
 
+int readSurface(VASurfaceID surfID)
+{
+    return va_status; 
+}
+
+int writeSurface(VASurfaceID surfID, vector<int32_t> indata)
+{
+    for (size_t i = 0; i < 256; i++)
+    {
+        printf("%d, ", indata[i]);
+    }
+    
+    return va_status; 
+}
+
 std::map<const char*, uint64_t> querySurfaceInfo(VASurfaceID surfID)
 {
     std::map<const char*, uint64_t> surfInfo;
@@ -787,6 +802,8 @@ PYBIND11_MODULE(pylibva, m) {
 
     m.def("create_surface", &createSurface, "Create VASurface");
     m.def("destroy_surface", &destorySurface, "Destroy VASurface");
+    m.def("read_surface", &readSurface, "Read data from VASurface");
+    m.def("write_surface", &writeSurface, "Write data to VASurface");
 
     m.def("create_context", &createContext, "Create VAContextID");
     m.def("destroy_context", &destroyContext, "Destroy VAContextID");
