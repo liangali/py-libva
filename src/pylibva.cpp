@@ -691,6 +691,88 @@ std::map<const char*, uint64_t> querySurfaceInfo(VASurfaceID surfID)
     return surfInfo;
 }
 
+uint32_t createContext(int dst_width, int dst_height, VASurfaceID dst_surf)
+{
+    VAConfigAttrib attrib = {};
+    attrib.type = VAConfigAttribRTFormat;
+    va_status = vaGetConfigAttributes(va_dpy, VAProfileNone, VAEntrypointVideoProc, &attrib, 1);
+    if (va_status != VA_STATUS_SUCCESS) {
+        printf("ERROR: vaGetConfigAttributes failed\n");
+        return VA_INVALID_ID; 
+    }
+
+    VAConfigID config_id = 0;
+    va_status = vaCreateConfig(va_dpy, VAProfileNone, VAEntrypointVideoProc, &attrib, 1, &config_id);
+    if (va_status != VA_STATUS_SUCCESS) {
+        printf("ERROR: vaCreateConfig failed\n");
+        return VA_INVALID_ID; 
+    }
+
+    VAContextID ctx_id = 0;
+    va_status = vaCreateContext(va_dpy, config_id, dst_width, dst_height, VA_PROGRESSIVE, &dst_surf, 1, &ctx_id);
+    if (va_status != VA_STATUS_SUCCESS) {
+        printf("ERROR: vaCreateContext failed\n");
+        return VA_INVALID_ID; 
+    }
+
+    return ctx_id;
+}
+
+void destroyContext(VAContextID ctx_id)
+{
+    vaDestroyContext(va_dpy, ctx_id);
+}
+
+int vppExecute(VAContextID ctx_id, VASurfaceID src_surf, VASurfaceID dst_surf)
+{
+    std::map<const char*, uint64_t> srcmap = querySurfaceInfo(src_surf);
+    std::map<const char*, uint64_t> dstmap = querySurfaceInfo(dst_surf);
+    uint16_t srcw = (uint16_t)srcmap["width"];
+    uint16_t srch = (uint16_t)srcmap["height"];
+    uint16_t dstw = (uint16_t)dstmap["width"];
+    uint16_t dsth = (uint16_t)dstmap["height"];
+
+    VAProcPipelineParameterBuffer pipeline_param = {};
+    VARectangle src_rect = {0, 0, srcw, srch};
+    VARectangle dst_rect = {0, 0, dstw, dsth};
+    VABufferID pipeline_buf_id = VA_INVALID_ID;
+    uint32_t filter_count = 0;
+    VABufferID filter_buf_id = VA_INVALID_ID;
+    pipeline_param.surface = src_surf;
+    pipeline_param.surface_region = &src_rect;
+    pipeline_param.output_region = &dst_rect;
+    pipeline_param.filter_flags = 0;
+    pipeline_param.filters      = &filter_buf_id;
+    pipeline_param.num_filters  = filter_count;
+    va_status = vaCreateBuffer(va_dpy, ctx_id, VAProcPipelineParameterBufferType, sizeof(pipeline_param), 1, &pipeline_param, &pipeline_buf_id);
+    if (va_status != VA_STATUS_SUCCESS) {
+        printf("ERROR: vaCreateBuffer failed\n");
+        return VA_INVALID_ID; 
+    }
+
+    va_status = vaBeginPicture(va_dpy, ctx_id, dst_surf);
+    if (va_status != VA_STATUS_SUCCESS) {
+        printf("ERROR: vaBeginPicture failed\n");
+        return VA_INVALID_ID; 
+    }
+
+    va_status = vaRenderPicture(va_dpy, ctx_id, &pipeline_buf_id, 1);
+    if (va_status != VA_STATUS_SUCCESS) {
+        printf("ERROR: vaRenderPicture failed\n");
+        return VA_INVALID_ID; 
+    }
+
+    va_status = vaEndPicture(va_dpy, ctx_id);
+    if (va_status != VA_STATUS_SUCCESS) {
+        printf("ERROR: vaEndPicture failed\n");
+        return VA_INVALID_ID; 
+    }
+
+    vaDestroyBuffer(va_dpy, pipeline_buf_id);
+
+    return va_status;
+}
+
 PYBIND11_MODULE(pylibva, m) {
     m.doc() = "libva python bindings"; // optional module docstring
     m.def("init", &vaInit, "Initialize VADisplay");
@@ -701,8 +783,14 @@ PYBIND11_MODULE(pylibva, m) {
     m.def("configs", &getConfigs, "Get attributes for a given profile/entrypoint pair");
 
     m.def("get_rtformat", &getRTFormat, "Get RT format list");
+    m.def("query_info", &querySurfaceInfo, "Destroy VASurface");
+
     m.def("create_surface", &createSurface, "Create VASurface");
     m.def("destroy_surface", &destorySurface, "Destroy VASurface");
-    m.def("query_info", &querySurfaceInfo, "Destroy VASurface");
+
+    m.def("create_context", &createContext, "Create VAContextID");
+    m.def("destroy_context", &destroyContext, "Destroy VAContextID");
+
+    m.def("vpp_execute", &vppExecute, "Execute VPP");
 }
 
