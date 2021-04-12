@@ -19,7 +19,7 @@ print(pyva.query_info(dst_surf))
 
 # in_data = np.fromfile(input_file, dtype=np.uint8, count=srcw*srch*3//2).reshape((srch*3//2, srcw))
 in_data = np.arange(srcw*srch*3//2).reshape((srch*3//2, srcw))
-pyva.write_surface(src_surf, in_data2)
+pyva.write_surface(src_surf, in_data)
 
 vpp_ctx = pyva.create_context(dstw, dsth, dst_surf)
 pyva.vpp_execute(vpp_ctx, src_surf, dst_surf)
