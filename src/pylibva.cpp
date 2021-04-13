@@ -708,7 +708,7 @@ py::array readSurface(VASurfaceID surf_id)
 
 int writeSurface(VASurfaceID surf_id, py::array_t<uint8_t, py::array::c_style | py::array::forcecast> indata)
 {
-    printf("ndim = %d, size = %dx%d\n", indata.ndim(), indata.shape()[1], indata.shape()[0]);
+    // printf("ndim = %d, size = %dx%d\n", indata.ndim(), indata.shape()[1], indata.shape()[0]);
 
     VAImage va_img = {};
     void *surf_ptr = nullptr;
@@ -723,6 +723,7 @@ int writeSurface(VASurfaceID surf_id, py::array_t<uint8_t, py::array::c_style | 
     uint16_t h = va_img.height;
     uint32_t pitch = va_img.pitches[0];
     uint32_t uv_offset = va_img.offsets[1];
+    // printf("w = %d, h = %d, pitch = %d, uvoffset = %d\n", w, h, pitch, uv_offset);
 
     va_status = vaMapBuffer(va_dpy, va_img.buf, &surf_ptr);
     if (va_status != VA_STATUS_SUCCESS) {
@@ -734,12 +735,14 @@ int writeSurface(VASurfaceID surf_id, py::array_t<uint8_t, py::array::c_style | 
     memset(dst, 0, va_img.data_size);
 
     // Y plane
-    for (size_t i = 0; i < h; i++)
+    for (size_t i = 0; i < h; i++) {
         memcpy(dst+i*pitch, src+i*w, w);
+    }
 
     // UV plane
-    for (size_t i = 0; i < h/2; i++)
+    for (size_t i = 0; i < h/2; i++) {
         memcpy(dst+uv_offset + i*pitch, src+(h+i)*w, w);
+    }
     
     vaUnmapBuffer(va_dpy, va_img.buf);
     vaDestroyImage(va_dpy, va_img.image_id);
