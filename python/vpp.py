@@ -10,16 +10,18 @@ def dump_image(buf, filename='../../tmp.bmp'):
     dst = cv2.cvtColor(buf, cv2.COLOR_YUV2BGR_NV12)
     cv2.imwrite(filename, dst)
 
-srcw, srch = 640, 480
-dstw, dsth = 224, 224
-input_file = '../../test.640x480.nv12'
+srcw, srch = 1920, 1080
+dstw, dsth = 300, 300
+
+# input_file = '../../test.%dx%d.nv12'%(srcw, srch)
+# in_data = np.fromfile(input_file, dtype=np.uint8, count=srcw*srch*3//2).reshape((srch*3//2, srcw))
+in_data = np.random.randint(256, size=(srch*3//2, srcw), dtype=np.uint8)
+cv2.putText(in_data, 'this is a test', (50, srch//2), cv2.FONT_HERSHEY_DUPLEX, 8, (255,255,0), 4)
 
 pyva.init()
 
 src_surf = pyva.create_surface(srcw, srch, "VA_RT_FORMAT_YUV420", 1)
 dst_surf = pyva.create_surface(dstw, dsth, "VA_RT_FORMAT_YUV420", 1)
-
-in_data = np.fromfile(input_file, dtype=np.uint8, count=srcw*srch*3//2).reshape((srch*3//2, srcw))
 pyva.write_surface(src_surf, in_data)
 
 vpp_ctx = pyva.create_context(dstw, dsth, dst_surf)
