@@ -669,7 +669,8 @@ py::array readSurface(VASurfaceID surf_id)
     uint16_t h = va_img.height;
     uint32_t pitch = va_img.pitches[0];
     uint32_t uv_offset = va_img.offsets[1];
-    
+    uint32_t fourcc = va_img.format.fourcc;
+
     va_status = vaMapBuffer(va_dpy, va_img.buf, &surf_ptr);
     if (va_status != VA_STATUS_SUCCESS) {
         printf("ERROR: vaMapBuffer failed\n");
@@ -677,21 +678,41 @@ py::array readSurface(VASurfaceID surf_id)
     }
 
     char* src = (char*)surf_ptr;
-    std::vector<char> dst(w*h*3/2, 0);
+    std::vector<char> dst;
+    ssize_t ndim;
+    std::vector<ssize_t> shape;
+    std::vector<ssize_t> strides;
 
-    // Y plane
-    for (size_t i = 0; i < h; i++)
-        memcpy(dst.data()+i*w, src+i*pitch, w);
-    // UV plane
-    for (size_t i = 0; i < h/2; i++)
-        memcpy(dst.data()+(h+i)*w, src+uv_offset+i*pitch, w);
+    switch (fourcc)
+    {
+    case 0x3231564E: // NV12
+        dst.resize(w*h*3/2, 0);
+        // Y plane
+        for (size_t i = 0; i < h; i++)
+            memcpy(dst.data()+i*w, src+i*pitch, w);
+        // UV plane
+        for (size_t i = 0; i < h/2; i++)
+            memcpy(dst.data()+(h+i)*w, src+uv_offset+i*pitch, w);
+        ndim = 2;
+        shape = { h*3/2 , w };
+        strides = { w , sizeof(uint8_t) };
+        break;
+    case 0x50424752: // RGBP
+        dst.resize(w*h*3, 0);
+        for (size_t c = 0; c < 3; c++)
+            for (size_t i = 0; i < h; i++)
+                memcpy(dst.data()+(2-c)*w*h+i*w, src+c*pitch*h+i*pitch, w);
+        ndim = 3;
+        shape = { 3, h , w };
+        strides = { w*h, w , sizeof(uint8_t) };
+        break;
+    default:
+    printf("readSurface: Unsupported format\n");
+        break;
+    }
 
     vaUnmapBuffer(va_dpy, va_img.buf);
     vaDestroyImage(va_dpy, va_img.image_id);
-
-    ssize_t ndim    = 2;
-    std::vector<ssize_t> shape   = { h*3/2 , w };
-    std::vector<ssize_t> strides = { w , sizeof(uint8_t) };
 
     // return 2-D NumPy array
     return py::array(
@@ -723,6 +744,7 @@ int writeSurface(VASurfaceID surf_id, py::array_t<uint8_t, py::array::c_style | 
     uint16_t h = va_img.height;
     uint32_t pitch = va_img.pitches[0];
     uint32_t uv_offset = va_img.offsets[1];
+    uint32_t fourcc = va_img.format.fourcc;
     // printf("w = %d, h = %d, pitch = %d, uvoffset = %d\n", w, h, pitch, uv_offset);
 
     va_status = vaMapBuffer(va_dpy, va_img.buf, &surf_ptr);
