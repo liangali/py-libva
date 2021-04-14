@@ -707,7 +707,7 @@ py::array readSurface(VASurfaceID surf_id)
         strides = { w*h, w , sizeof(uint8_t) };
         break;
     default:
-    printf("readSurface: Unsupported format\n");
+        printf("ERROR: Unsupported format\n");
         break;
     }
 
@@ -743,7 +743,6 @@ int writeSurface(VASurfaceID surf_id, py::array_t<uint8_t, py::array::c_style | 
     uint16_t w = va_img.width;
     uint16_t h = va_img.height;
     uint32_t pitch = va_img.pitches[0];
-    uint32_t uv_offset = va_img.offsets[1];
     uint32_t fourcc = va_img.format.fourcc;
     // printf("w = %d, h = %d, pitch = %d, uvoffset = %d\n", w, h, pitch, uv_offset);
 
@@ -752,20 +751,33 @@ int writeSurface(VASurfaceID surf_id, py::array_t<uint8_t, py::array::c_style | 
         printf("ERROR: vaMapBuffer failed\n");
         return va_status; 
     }
+
     char* src = (char*)indata.data();
     char* dst = (char*)surf_ptr;
     memset(dst, 0, va_img.data_size);
 
-    // Y plane
-    for (size_t i = 0; i < h; i++) {
-        memcpy(dst+i*pitch, src+i*w, w);
+    switch (fourcc)
+    {
+    case 0x3231564E: // NV12
+        // Y plane
+        for (size_t i = 0; i < h; i++) {
+            memcpy(dst+i*pitch, src+i*w, w);
+        }
+        // UV plane
+        for (size_t i = 0; i < h/2; i++) {
+            memcpy(dst+va_img.offsets[1] + i*pitch, src+(h+i)*w, w);
+        }
+        break;
+    case 0x50424752: // RGBP
+        for (size_t c = 0; c < 3; c++)
+            for (size_t i = 0; i < h; i++)
+                memcpy(dst+va_img.offsets[c]+i*pitch, src+c*(w*h)+i*w, w);
+        break;
+    default:
+        printf("ERROR: Unsupported format\n");
+        break;
     }
 
-    // UV plane
-    for (size_t i = 0; i < h/2; i++) {
-        memcpy(dst+uv_offset + i*pitch, src+(h+i)*w, w);
-    }
-    
     vaUnmapBuffer(va_dpy, va_img.buf);
     vaDestroyImage(va_dpy, va_img.image_id);
     
