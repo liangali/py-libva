@@ -643,7 +643,7 @@ uint32_t createSurface(uint32_t width, uint32_t height, const char* format, uint
     // surf_attrib.value.value.i = fourcc;
     va_status = vaCreateSurfaces(va_dpy, formatRT, width, height, &surfID, numSurf, nullptr, 0);
     if (va_status != VA_STATUS_SUCCESS) {
-        printf("ERROR: vaCreateSurfaces failed\n");
+        // printf("ERROR: vaCreateSurfaces failed\n");
         return VA_INVALID_ID; 
     }
     return surfID;

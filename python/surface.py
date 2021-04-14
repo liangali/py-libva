@@ -5,17 +5,12 @@ import pylibva as pyva
 import json
 from json2html import *
 
-pyva.init()
-
-surf = pyva.create_surface(1280, 720, "VA_RT_FORMAT_YUV420", 1)
-print(pyva.query_info(surf))
-
-def query_surface_info():
+def query_surface_format():
     outjson = []
     for rtf in pyva.get_rtformat():
         surf = pyva.create_surface(1920, 1080, rtf, 1)
-        #print('SURF: %s, %x' % (rtf, surf))
         if surf == 0xffffffff:
+            print('ERROR: failed to create %s, return = %x' % (rtf, surf))
             continue
         info = pyva.query_info(surf)
         
@@ -36,7 +31,26 @@ def query_surface_info():
     with open('../../surface.html', 'wt') as f:
         f.writelines(html)
 
-query_surface_info()
+def test_surface_creation():
+    width = [i for i in range(8, 4096, 64)]
+    height = [i for i in range(8, 4096, 64)]
+    total_sum = 0
+    for fmt in pyva.get_rtformat():
+        total, passed = 0, 0;
+        for w in width:
+            for h in height:
+                surf = pyva.create_surface(w, h, fmt, 1)
+                if surf != 0xffffffff:
+                    passed += 1
+                pyva.destroy_surface(surf, 1)
+                total += 1
+        total_sum += total
+        print('INFO: test create/destroy for %s, [%d/%d] passed' % (fmt, passed, total))
+    print("%d tests finished" % total_sum)
 
+pyva.init()
+query_surface_format()
+test_surface_creation()
 pyva.close()
+
 print('done')

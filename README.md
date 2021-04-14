@@ -1,7 +1,7 @@
 # py-libva
 libva python binding
 
-## how build & run
+## how to build & run
 
 install dependencies
 ```bash
