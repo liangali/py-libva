@@ -856,7 +856,7 @@ void destroyContext(VAContextID ctx_id)
     vaDestroyContext(va_dpy, ctx_id);
 }
 
-int vppExecute(VAContextID ctx_id, VASurfaceID src_surf, VASurfaceID dst_surf)
+int vppExecute(VAContextID ctx_id, VASurfaceID src_surf, VASurfaceID dst_surf, uint32_t filter_flags)
 {
     std::map<const char*, uint64_t> srcmap = querySurfaceInfo(src_surf);
     std::map<const char*, uint64_t> dstmap = querySurfaceInfo(dst_surf);
@@ -874,7 +874,7 @@ int vppExecute(VAContextID ctx_id, VASurfaceID src_surf, VASurfaceID dst_surf)
     pipeline_param.surface = src_surf;
     pipeline_param.surface_region = &src_rect;
     pipeline_param.output_region = &dst_rect;
-    pipeline_param.filter_flags = 0;
+    pipeline_param.filter_flags = filter_flags;
     pipeline_param.filters      = &filter_buf_id;
     pipeline_param.num_filters  = filter_count;
     va_status = vaCreateBuffer(va_dpy, ctx_id, VAProcPipelineParameterBufferType, sizeof(pipeline_param), 1, &pipeline_param, &pipeline_buf_id);
