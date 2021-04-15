@@ -4,6 +4,7 @@ import numpy as np
 
 sys.path.append('../build')
 import pylibva as pyva
+
 class VA_FILTER:
     INTERPOLATION_DEFAULT           = 0x00000000
     INTERPOLATION_NEAREST_NEIGHBOR  = 0x00001000
@@ -179,25 +180,28 @@ def test_rgb_diff():
     dst_surf = pyva.create_surface(dstw, dsth, "VA_RT_FORMAT_RGBP", 1)
     pyva.write_surface(src_surf, in_nv12_cv)
     vpp_ctx = pyva.create_context(dstw, dsth, dst_surf)
+
     # Color space = default
     pyva.vpp_execute(vpp_ctx, src_surf, dst_surf, VA_FILTER.INTERPOLATION_BILINEAR, VAProcColorStandard.NONE)
     output_rgbp = pyva.read_surface(dst_surf)
-    dump_image(output_rgbp, 'RGBP', '../../tmp.output.gpu.default.bmp')
     out_rgb_gpu = output_rgbp.transpose((1, 2, 0))
+    dump_image(out_rgb_gpu, 'RGB', '../../tmp.output.gpu.default.bmp')
     dump_image(np.absolute(out_rgb_cv - out_rgb_gpu),  'RGB', '../../tmp.rgb.diff.cv-gpu.default.bmp', True)
     print('CV/GPU-Default average diff per pixel: %f' % (np.sum(np.absolute(out_rgb_cv - out_rgb_gpu))/out_rgb_cv.size))
+
     # Color space = BT601
     pyva.vpp_execute(vpp_ctx, src_surf, dst_surf, VA_FILTER.INTERPOLATION_BILINEAR, VAProcColorStandard.BT601)
     output_rgbp = pyva.read_surface(dst_surf)
-    dump_image(output_rgbp, 'RGBP', '../../tmp.output.gpu.bt601.bmp')
     out_rgb_gpu = output_rgbp.transpose((1, 2, 0))
+    dump_image(out_rgb_gpu, 'RGB', '../../tmp.output.gpu.bt601.bmp')
     dump_image(np.absolute(out_rgb_cv - out_rgb_gpu),  'RGB', '../../tmp.rgb.diff.cv-gpu.bt601.bmp', True)
     print('CV/GPU-BT601 average diff per pixel: %f' % (np.sum(np.absolute(out_rgb_cv - out_rgb_gpu))/out_rgb_cv.size))
+
     # Color space = BT709
     pyva.vpp_execute(vpp_ctx, src_surf, dst_surf, VA_FILTER.INTERPOLATION_BILINEAR, VAProcColorStandard.BT709)
     output_rgbp = pyva.read_surface(dst_surf)
-    dump_image(output_rgbp, 'RGBP', '../../tmp.output.gpu.bt709.bmp')
     out_rgb_gpu = output_rgbp.transpose((1, 2, 0))
+    dump_image(out_rgb_gpu, 'RGB', '../../tmp.output.gpu.bt709.bmp')
     dump_image(np.absolute(out_rgb_cv - out_rgb_gpu),  'RGB', '../../tmp.rgb.diff.cv-gpu.bt709.bmp', True)
     print('CV/GPU-BT709 average diff per pixel: %f' % (np.sum(np.absolute(out_rgb_cv - out_rgb_gpu))/out_rgb_cv.size))
 
@@ -210,11 +214,11 @@ pyva.init()
 # nv12_to_nv12(1920, 1080, 300, 300, VA_FILTER.INTERPOLATION_BILINEAR | VA_FILTER.SCALING_FAST)
 # nv12_to_rgbp(1920, 1080, 224, 224, VA_FILTER.INTERPOLATION_BILINEAR)
 
-#test_nv12_scaling()
-#test_opencv_scaling()
+# test_nv12_scaling()
+# test_opencv_scaling()
 
-test_nv12_diff()
-# test_rgb_diff()
+# test_nv12_diff()
+test_rgb_diff()
 
 pyva.close()
 
