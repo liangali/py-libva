@@ -16,6 +16,7 @@ class VA_FILTER:
     SCALING_HQ                      = 0x00000200
     SCALING_NL_ANAMORPHIC           = 0x00000300
     SCALING_MASK                    = 0x00000f00
+
 class VAProcColorStandard:
     NONE        = 0
     BT601       = 1
@@ -114,25 +115,25 @@ def test_nv12_scaling():
     out2_nv12 = nv12_to_nv12(1920, 1080, 300, 300, VA_FILTER.INTERPOLATION_NEAREST_NEIGHBOR)
     out3_nv12 = nv12_to_nv12(1920, 1080, 300, 300, VA_FILTER.INTERPOLATION_BILINEAR)
     out4_nv12 = nv12_to_nv12(1920, 1080, 300, 300, VA_FILTER.INTERPOLATION_ADVANCED)
-    dump_image(np.absolute(out2_nv12 - out1_nv12),  'NV12', '../../tmp.output.2-1.bmp', True)
-    dump_image(np.absolute(out3_nv12 - out1_nv12),  'NV12', '../../tmp.output.3-1.bmp', True)
-    dump_image(np.absolute(out4_nv12 - out1_nv12),  'NV12', '../../tmp.output.4-1.bmp', True)
+    dump_image(np.absolute(out2_nv12.astype(np.int8) - out1_nv12.astype(np.int8)),  'NV12', '../../tmp.output.2-1.bmp', True)
+    dump_image(np.absolute(out3_nv12.astype(np.int8) - out1_nv12.astype(np.int8)),  'NV12', '../../tmp.output.3-1.bmp', True)
+    dump_image(np.absolute(out4_nv12.astype(np.int8) - out1_nv12.astype(np.int8)),  'NV12', '../../tmp.output.4-1.bmp', True)
 
     # Bilinear - Fast vs. HQ ==> same
     out5_nv12 = nv12_to_nv12(1920, 1080, 300, 300, VA_FILTER.INTERPOLATION_BILINEAR | VA_FILTER.SCALING_FAST)
     out6_nv12 = nv12_to_nv12(1920, 1080, 300, 300, VA_FILTER.INTERPOLATION_BILINEAR | VA_FILTER.SCALING_HQ)
-    dump_image(np.absolute(out6_nv12 - out5_nv12),  'NV12', '../../tmp.output.6-5.bmp', True)
+    dump_image(np.absolute(out6_nv12.astype(np.int8) - out5_nv12.astype(np.int8)),  'NV12', '../../tmp.output.6-5.bmp', True)
 
     # Advanced - Fast vs. HQ ==> same
     out7_nv12 = nv12_to_nv12(1920, 1080, 300, 300, VA_FILTER.INTERPOLATION_ADVANCED | VA_FILTER.SCALING_FAST)
     out8_nv12 = nv12_to_nv12(1920, 1080, 300, 300, VA_FILTER.INTERPOLATION_ADVANCED | VA_FILTER.SCALING_HQ)
-    dump_image(np.absolute(out8_nv12 - out7_nv12),  'NV12', '../../tmp.output.8-7.bmp', True)
+    dump_image(np.absolute(out8_nv12.astype(np.int8) - out7_nv12.astype(np.int8)),  'NV12', '../../tmp.output.8-7.bmp', True)
 
     # Fast - Bilinear vs. Advanced ==> diff
-    dump_image(np.absolute(out7_nv12 - out5_nv12),  'NV12', '../../tmp.output.7-5.bmp', True)
+    dump_image(np.absolute(out7_nv12.astype(np.int8) - out5_nv12.astype(np.int8)),  'NV12', '../../tmp.output.7-5.bmp', True)
 
     # HQ - Bilinear vs. Advanced ==> diff
-    dump_image(np.absolute(out8_nv12 - out6_nv12),  'NV12', '../../tmp.output.8-6.bmp', True)
+    dump_image(np.absolute(out8_nv12.astype(np.int8) - out6_nv12.astype(np.int8)),  'NV12', '../../tmp.output.8-6.bmp', True)
 
 def test_opencv_scaling():
     # OpenCV CPU scaling
@@ -162,8 +163,8 @@ def test_nv12_diff():
     pyva.destroy_surface(dst_surf, 1)
     pyva.destroy_context(vpp_ctx)
 
-    dump_image(np.absolute(out_nv12_cv - out_nv12_gpu),  'GRAY', '../../tmp.nv12.diff.cv-gpu.bmp', True)
-    print('CV/GPU NV12 average diff per pixel: %f' % (np.sum(np.absolute(out_nv12_cv - out_nv12_gpu))/out_nv12_cv.size))
+    dump_image(np.absolute(out_nv12_cv.astype(np.int8) - out_nv12_gpu.astype(np.int8)),  'GRAY', '../../tmp.nv12.diff.cv-gpu.bmp', True)
+    print('CV/GPU NV12 average diff per pixel: %f' % (np.sum(np.absolute(out_nv12_cv.astype(np.int8) - out_nv12_gpu.astype(np.int8)))/out_nv12_cv.size))
 
 def test_rgb_diff():
     srcw, srch = 1920, 1080
@@ -186,24 +187,24 @@ def test_rgb_diff():
     output_rgbp = pyva.read_surface(dst_surf)
     out_rgb_gpu = output_rgbp.transpose((1, 2, 0))
     dump_image(out_rgb_gpu, 'RGB', '../../tmp.output.gpu.default.bmp')
-    dump_image(np.absolute(out_rgb_cv - out_rgb_gpu),  'RGB', '../../tmp.rgb.diff.cv-gpu.default.bmp', True)
-    print('CV/GPU-Default average diff per pixel: %f' % (np.sum(np.absolute(out_rgb_cv - out_rgb_gpu))/out_rgb_cv.size))
+    dump_image(np.absolute(out_rgb_cv.astype(np.int8) - out_rgb_gpu.astype(np.int8)),  'RGB', '../../tmp.rgb.diff.cv-gpu.default.bmp', True)
+    print('CV/GPU-Default average diff per pixel: %f' % (np.sum(np.absolute(out_rgb_cv.astype(np.int8) - out_rgb_gpu.astype(np.int8)))/out_rgb_cv.size))
 
     # Color space = BT601
     pyva.vpp_execute(vpp_ctx, src_surf, dst_surf, VA_FILTER.INTERPOLATION_BILINEAR, VAProcColorStandard.BT601)
     output_rgbp = pyva.read_surface(dst_surf)
     out_rgb_gpu = output_rgbp.transpose((1, 2, 0))
     dump_image(out_rgb_gpu, 'RGB', '../../tmp.output.gpu.bt601.bmp')
-    dump_image(np.absolute(out_rgb_cv - out_rgb_gpu),  'RGB', '../../tmp.rgb.diff.cv-gpu.bt601.bmp', True)
-    print('CV/GPU-BT601 average diff per pixel: %f' % (np.sum(np.absolute(out_rgb_cv - out_rgb_gpu))/out_rgb_cv.size))
+    dump_image(np.absolute(out_rgb_cv.astype(np.int8) - out_rgb_gpu.astype(np.int8)),  'RGB', '../../tmp.rgb.diff.cv-gpu.bt601.bmp', True)
+    print('CV/GPU-BT601 average diff per pixel: %f' % (np.sum(np.absolute(out_rgb_cv.astype(np.int8) - out_rgb_gpu.astype(np.int8)))/out_rgb_cv.size))
 
     # Color space = BT709
     pyva.vpp_execute(vpp_ctx, src_surf, dst_surf, VA_FILTER.INTERPOLATION_BILINEAR, VAProcColorStandard.BT709)
     output_rgbp = pyva.read_surface(dst_surf)
     out_rgb_gpu = output_rgbp.transpose((1, 2, 0))
     dump_image(out_rgb_gpu, 'RGB', '../../tmp.output.gpu.bt709.bmp')
-    dump_image(np.absolute(out_rgb_cv - out_rgb_gpu),  'RGB', '../../tmp.rgb.diff.cv-gpu.bt709.bmp', True)
-    print('CV/GPU-BT709 average diff per pixel: %f' % (np.sum(np.absolute(out_rgb_cv - out_rgb_gpu))/out_rgb_cv.size))
+    dump_image(np.absolute(out_rgb_cv.astype(np.int8) - out_rgb_gpu.astype(np.int8)),  'RGB', '../../tmp.rgb.diff.cv-gpu.bt709.bmp', True)
+    print('CV/GPU-BT709 average diff per pixel: %f' % (np.sum(np.absolute(out_rgb_cv.astype(np.int8) - out_rgb_gpu.astype(np.int8)))/out_rgb_cv.size))
 
     pyva.destroy_surface(src_surf, 1)
     pyva.destroy_surface(dst_surf, 1)
@@ -217,7 +218,7 @@ pyva.init()
 # test_nv12_scaling()
 # test_opencv_scaling()
 
-# test_nv12_diff()
+test_nv12_diff()
 test_rgb_diff()
 
 pyva.close()
