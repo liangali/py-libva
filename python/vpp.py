@@ -170,6 +170,7 @@ def test_rgb_diff():
     srcw, srch = 1920, 1080
     dstw, dsth = 300, 300
     in_nv12_cv = get_nv12(srcw, srch, True)
+    # dump_image(in_nv12_cv,  'NV12', '../../tmp.input.nv12.cv.bmp', False)
 
     # Opencv scaling & CSC
     in_rgb_cv = cv2.cvtColor(in_nv12_cv, cv2.COLOR_YUV2BGR_NV12)
