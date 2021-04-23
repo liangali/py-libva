@@ -1,6 +1,7 @@
 import sys
 import cv2
 import numpy as np
+import math
 
 sys.path.append('../build')
 import pylibva as pyva
@@ -33,6 +34,14 @@ class VAProcColorStandard:
     BT2020      = 12
     Explicit    = 13
     Count       = 14
+
+def PSNR(original, compressed):
+    mse = np.mean((original - compressed) ** 2)
+    if(mse == 0):
+        return 100
+    max_pixel = 255.0
+    psnr = 20 * math.log10(max_pixel / math.sqrt(mse))
+    return psnr
 
 def dump_image(buf, fmt, filename='../../tmp.bmp', dumptxt=False):
     if fmt == 'NV12':
@@ -190,6 +199,7 @@ def test_rgb_diff():
     dump_image(out_rgb_gpu, 'RGB', '../../tmp.output.gpu.default.bmp')
     dump_image(np.absolute(out_rgb_cv.astype(np.int8) - out_rgb_gpu.astype(np.int8)),  'RGB', '../../tmp.rgb.diff.cv-gpu.default.bmp', True)
     print('CV/GPU-Default average diff per pixel: %f' % (np.sum(np.absolute(out_rgb_cv.astype(np.int8) - out_rgb_gpu.astype(np.int8)))/out_rgb_cv.size))
+    print('PSNR = %f' % PSNR(out_rgb_cv.astype(np.int8), out_rgb_gpu.astype(np.int8)))
 
     # Color space = BT601
     pyva.vpp_execute(vpp_ctx, src_surf, dst_surf, VA_FILTER.INTERPOLATION_BILINEAR, VAProcColorStandard.BT601)
@@ -198,6 +208,7 @@ def test_rgb_diff():
     dump_image(out_rgb_gpu, 'RGB', '../../tmp.output.gpu.bt601.bmp')
     dump_image(np.absolute(out_rgb_cv.astype(np.int8) - out_rgb_gpu.astype(np.int8)),  'RGB', '../../tmp.rgb.diff.cv-gpu.bt601.bmp', True)
     print('CV/GPU-BT601 average diff per pixel: %f' % (np.sum(np.absolute(out_rgb_cv.astype(np.int8) - out_rgb_gpu.astype(np.int8)))/out_rgb_cv.size))
+    print('PSNR = %f' % PSNR(out_rgb_cv.astype(np.int8), out_rgb_gpu.astype(np.int8)))
 
     # Color space = BT709
     pyva.vpp_execute(vpp_ctx, src_surf, dst_surf, VA_FILTER.INTERPOLATION_BILINEAR, VAProcColorStandard.BT709)
@@ -206,7 +217,8 @@ def test_rgb_diff():
     dump_image(out_rgb_gpu, 'RGB', '../../tmp.output.gpu.bt709.bmp')
     dump_image(np.absolute(out_rgb_cv.astype(np.int8) - out_rgb_gpu.astype(np.int8)),  'RGB', '../../tmp.rgb.diff.cv-gpu.bt709.bmp', True)
     print('CV/GPU-BT709 average diff per pixel: %f' % (np.sum(np.absolute(out_rgb_cv.astype(np.int8) - out_rgb_gpu.astype(np.int8)))/out_rgb_cv.size))
-
+    print('PSNR = %f' % PSNR(out_rgb_cv.astype(np.int8), out_rgb_gpu.astype(np.int8)))
+    
     pyva.destroy_surface(src_surf, 1)
     pyva.destroy_surface(dst_surf, 1)
     pyva.destroy_context(vpp_ctx)
@@ -219,7 +231,7 @@ pyva.init()
 # test_nv12_scaling()
 # test_opencv_scaling()
 
-test_nv12_diff()
+# test_nv12_diff()
 test_rgb_diff()
 
 pyva.close()
