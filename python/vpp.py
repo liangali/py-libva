@@ -223,17 +223,31 @@ def test_rgb_diff():
     pyva.destroy_surface(dst_surf, 1)
     pyva.destroy_context(vpp_ctx)
 
+def test_rgbp():
+    srcw, srch = 1920, 1080
+    dstw, dsth = 300, 300
+    in_nv12_cv = get_nv12(srcw, srch, True)
+
+    src_surf = pyva.create_surface(srcw, srch, "VA_RT_FORMAT_YUV420", 1)
+    dst_surf = pyva.create_surface(dstw, dsth, "VA_RT_FORMAT_RGBP", 1)
+    pyva.write_surface(src_surf, in_nv12_cv)
+    vpp_ctx = pyva.create_context(dstw, dsth, dst_surf)
+
+    pyva.vpp_execute(vpp_ctx, src_surf, dst_surf, VA_FILTER.INTERPOLATION_BILINEAR, VAProcColorStandard.NONE)
+    output_rgbp = pyva.read_surface(dst_surf)
+    out_rgb_gpu = output_rgbp.transpose((1, 2, 0))
+    dump_image(out_rgb_gpu, 'RGB', '../../tmp.output.gpu.default.bmp')
+
 pyva.init()
 
 # nv12_to_nv12(1920, 1080, 300, 300, VA_FILTER.INTERPOLATION_BILINEAR | VA_FILTER.SCALING_FAST)
 # nv12_to_rgbp(1920, 1080, 224, 224, VA_FILTER.INTERPOLATION_BILINEAR)
-
 # test_nv12_scaling()
 # test_opencv_scaling()
-
 # test_nv12_diff()
-test_rgb_diff()
+# test_rgb_diff()
+
+test_rgbp()
 
 pyva.close()
-
 print('done')
