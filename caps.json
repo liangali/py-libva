@@ -1,0 +1,1448 @@
+{
+    "VAProfileMPEG2Simple": {
+        "VAEntrypointVLD": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420",
+                "VA_RT_FORMAT_YUV422",
+                "VA_RT_FORMAT_RGB32"
+            ],
+            "VAConfigAttribDecSliceMode": [
+                "VA_DEC_SLICE_MODE_NORMAL"
+            ],
+            "VAConfigAttribDecProcessing": [],
+            "VAConfigAttribMaxPictureWidth": [
+                "1920"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "1920"
+            ],
+            "VAConfigAttribProcessingRate": [
+                "VA_PROCESSING_RATE_DECODE"
+            ],
+            "VAConfigAttribCustomRoundingControl": [
+                "False"
+            ]
+        },
+        "VAEntrypointEncSlice": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420"
+            ],
+            "VAConfigAttribRateControl": [
+                "VA_RC_CBR",
+                "VA_RC_VBR",
+                "VA_RC_CQP",
+                "VA_RC_MB"
+            ],
+            "VAConfigAttribEncPackedHeaders": [
+                "VA_ENC_PACKED_HEADER_RAW_DATA"
+            ],
+            "VAConfigAttribEncInterlaced": [
+                "VA_ENC_INTERLACED_FRAME"
+            ],
+            "VAConfigAttribEncMaxRefFrames": [
+                "ref_num_list0 = 1, ref_num_list1 = 1"
+            ],
+            "VAConfigAttribEncMaxSlices": [
+                "0"
+            ],
+            "VAConfigAttribEncSliceStructure": [
+                "VA_ENC_SLICE_STRUCTURE_ARBITRARY_MACROBLOCKS"
+            ],
+            "VAConfigAttribMaxPictureWidth": [
+                "1920"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "1920"
+            ],
+            "VAConfigAttribEncJPEG": [
+                "0x0000d0c0"
+            ],
+            "VAConfigAttribEncQualityRange": [
+                "7"
+            ],
+            "VAConfigAttribEncQuantization": [],
+            "VAConfigAttribEncIntraRefresh": [],
+            "VAConfigAttribEncSkipFrame": [
+                "0x00000001"
+            ],
+            "VAConfigAttribEncROI": [
+                "num_roi_regions = 0, priority_support = 0, delta_support = 0"
+            ],
+            "VAConfigAttribProcessingRate": [
+                "VA_PROCESSING_RATE_ENCODE"
+            ],
+            "VAConfigAttribEncDirtyRect": [
+                "0x00000004"
+            ],
+            "VAConfigAttribEncParallelRateControl": [
+                "maximum_supported_layer = 1"
+            ],
+            "VAConfigAttribFEIMVPredictors": [
+                "0x00000000"
+            ],
+            "VAConfigAttribCustomRoundingControl": [
+                "False"
+            ]
+        }
+    },
+    "VAProfileMPEG2Main": {
+        "VAEntrypointVLD": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420",
+                "VA_RT_FORMAT_YUV422",
+                "VA_RT_FORMAT_RGB32"
+            ],
+            "VAConfigAttribDecSliceMode": [
+                "VA_DEC_SLICE_MODE_NORMAL"
+            ],
+            "VAConfigAttribDecProcessing": [],
+            "VAConfigAttribMaxPictureWidth": [
+                "1920"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "1920"
+            ],
+            "VAConfigAttribProcessingRate": [
+                "VA_PROCESSING_RATE_DECODE"
+            ],
+            "VAConfigAttribCustomRoundingControl": [
+                "False"
+            ]
+        },
+        "VAEntrypointEncSlice": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420"
+            ],
+            "VAConfigAttribRateControl": [
+                "VA_RC_CBR",
+                "VA_RC_VBR",
+                "VA_RC_CQP",
+                "VA_RC_MB"
+            ],
+            "VAConfigAttribEncPackedHeaders": [
+                "VA_ENC_PACKED_HEADER_RAW_DATA"
+            ],
+            "VAConfigAttribEncInterlaced": [
+                "VA_ENC_INTERLACED_FRAME"
+            ],
+            "VAConfigAttribEncMaxRefFrames": [
+                "ref_num_list0 = 1, ref_num_list1 = 1"
+            ],
+            "VAConfigAttribEncMaxSlices": [
+                "0"
+            ],
+            "VAConfigAttribEncSliceStructure": [
+                "VA_ENC_SLICE_STRUCTURE_ARBITRARY_MACROBLOCKS"
+            ],
+            "VAConfigAttribMaxPictureWidth": [
+                "1920"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "1920"
+            ],
+            "VAConfigAttribEncJPEG": [
+                "0x0000d0c0"
+            ],
+            "VAConfigAttribEncQualityRange": [
+                "7"
+            ],
+            "VAConfigAttribEncQuantization": [],
+            "VAConfigAttribEncIntraRefresh": [],
+            "VAConfigAttribEncSkipFrame": [
+                "0x00000001"
+            ],
+            "VAConfigAttribEncROI": [
+                "num_roi_regions = 0, priority_support = 0, delta_support = 0"
+            ],
+            "VAConfigAttribProcessingRate": [
+                "VA_PROCESSING_RATE_ENCODE"
+            ],
+            "VAConfigAttribEncDirtyRect": [
+                "0x00000004"
+            ],
+            "VAConfigAttribEncParallelRateControl": [
+                "maximum_supported_layer = 1"
+            ],
+            "VAConfigAttribFEIMVPredictors": [
+                "0x00000000"
+            ],
+            "VAConfigAttribCustomRoundingControl": [
+                "False"
+            ]
+        }
+    },
+    "VAProfileH264Main": {
+        "VAEntrypointVLD": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420",
+                "VA_RT_FORMAT_YUV422",
+                "VA_RT_FORMAT_RGB32"
+            ],
+            "VAConfigAttribDecSliceMode": [
+                "VA_DEC_SLICE_MODE_NORMAL",
+                "VA_DEC_SLICE_MODE_BASE"
+            ],
+            "VAConfigAttribDecProcessing": [
+                "VA_DEC_PROCESSING"
+            ],
+            "VAConfigAttribMaxPictureWidth": [
+                "4096"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "4096"
+            ],
+            "VAConfigAttribProcessingRate": [
+                "VA_PROCESSING_RATE_DECODE"
+            ],
+            "VAConfigAttribCustomRoundingControl": [
+                "True"
+            ]
+        },
+        "VAEntrypointEncSlice": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420"
+            ],
+            "VAConfigAttribRateControl": [
+                "VA_RC_CBR",
+                "VA_RC_VBR",
+                "VA_RC_VCM",
+                "VA_RC_CQP",
+                "VA_RC_ICQ",
+                "VA_RC_MB",
+                "VA_RC_QVBR",
+                "VA_RC_AVBR"
+            ],
+            "VAConfigAttribEncPackedHeaders": [
+                "VA_ENC_PACKED_HEADER_SEQUENCE",
+                "VA_ENC_PACKED_HEADER_PICTURE",
+                "VA_ENC_PACKED_HEADER_SLICE",
+                "VA_ENC_PACKED_HEADER_MISC",
+                "VA_ENC_PACKED_HEADER_RAW_DATA"
+            ],
+            "VAConfigAttribEncInterlaced": [
+                "VA_ENC_INTERLACED_FIELD"
+            ],
+            "VAConfigAttribEncMaxRefFrames": [
+                "ref_num_list0 = 8, ref_num_list1 = 2"
+            ],
+            "VAConfigAttribEncMaxSlices": [
+                "256"
+            ],
+            "VAConfigAttribEncSliceStructure": [
+                "VA_ENC_SLICE_STRUCTURE_ARBITRARY_MACROBLOCKS"
+            ],
+            "VAConfigAttribMaxPictureWidth": [
+                "4096"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "4096"
+            ],
+            "VAConfigAttribEncJPEG": [
+                "0x0000d0c0"
+            ],
+            "VAConfigAttribEncQualityRange": [
+                "7"
+            ],
+            "VAConfigAttribEncQuantization": [
+                "VA_ENC_QUANTIZATION_TRELLIS_SUPPORTED"
+            ],
+            "VAConfigAttribEncIntraRefresh": [
+                "VA_ENC_INTRA_REFRESH_ROLLING_COLUMN",
+                "VA_ENC_INTRA_REFRESH_ROLLING_ROW"
+            ],
+            "VAConfigAttribEncSkipFrame": [
+                "0x00000001"
+            ],
+            "VAConfigAttribEncROI": [
+                "num_roi_regions = 8, priority_support = 0, delta_support = 1"
+            ],
+            "VAConfigAttribProcessingRate": [
+                "VA_PROCESSING_RATE_ENCODE"
+            ],
+            "VAConfigAttribEncDirtyRect": [
+                "0x00000004"
+            ],
+            "VAConfigAttribEncParallelRateControl": [
+                "maximum_supported_layer = 1"
+            ],
+            "VAConfigAttribFEIMVPredictors": [
+                "0x00000004"
+            ],
+            "VAConfigAttribCustomRoundingControl": [
+                "True"
+            ],
+            "VAConfigAttribMaxFrameSize": [
+                "max_frame_size = 1, multiple_pass = 1"
+            ]
+        },
+        "VAEntrypointFEI": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420"
+            ],
+            "VAConfigAttribRateControl": [
+                "VA_RC_CQP"
+            ],
+            "VAConfigAttribEncPackedHeaders": [
+                "VA_ENC_PACKED_HEADER_SEQUENCE",
+                "VA_ENC_PACKED_HEADER_PICTURE",
+                "VA_ENC_PACKED_HEADER_SLICE",
+                "VA_ENC_PACKED_HEADER_MISC",
+                "VA_ENC_PACKED_HEADER_RAW_DATA"
+            ],
+            "VAConfigAttribEncInterlaced": [
+                "VA_ENC_INTERLACED_FIELD"
+            ],
+            "VAConfigAttribEncMaxRefFrames": [
+                "ref_num_list0 = 8, ref_num_list1 = 2"
+            ],
+            "VAConfigAttribEncMaxSlices": [
+                "256"
+            ],
+            "VAConfigAttribEncSliceStructure": [
+                "VA_ENC_SLICE_STRUCTURE_ARBITRARY_MACROBLOCKS"
+            ],
+            "VAConfigAttribMaxPictureWidth": [
+                "4096"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "4096"
+            ],
+            "VAConfigAttribEncJPEG": [
+                "0x0000d0c0"
+            ],
+            "VAConfigAttribEncQualityRange": [
+                "7"
+            ],
+            "VAConfigAttribEncQuantization": [
+                "VA_ENC_QUANTIZATION_TRELLIS_SUPPORTED"
+            ],
+            "VAConfigAttribEncIntraRefresh": [
+                "VA_ENC_INTRA_REFRESH_ROLLING_COLUMN",
+                "VA_ENC_INTRA_REFRESH_ROLLING_ROW"
+            ],
+            "VAConfigAttribEncSkipFrame": [
+                "0x00000001"
+            ],
+            "VAConfigAttribEncROI": [
+                "num_roi_regions = 8, priority_support = 0, delta_support = 1"
+            ],
+            "VAConfigAttribProcessingRate": [
+                "VA_PROCESSING_RATE_ENCODE"
+            ],
+            "VAConfigAttribEncDirtyRect": [
+                "0x00000004"
+            ],
+            "VAConfigAttribEncParallelRateControl": [
+                "maximum_supported_layer = 1"
+            ],
+            "VAConfigAttribFEIFunctionType": [
+                "0x00000007"
+            ],
+            "VAConfigAttribFEIMVPredictors": [
+                "0x00000004"
+            ],
+            "VAConfigAttribCustomRoundingControl": [
+                "True"
+            ],
+            "VAConfigAttribMaxFrameSize": [
+                "max_frame_size = 1, multiple_pass = 1"
+            ]
+        },
+        "VAEntrypointEncSliceLP": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420"
+            ],
+            "VAConfigAttribRateControl": [
+                "VA_RC_CQP"
+            ],
+            "VAConfigAttribEncPackedHeaders": [
+                "VA_ENC_PACKED_HEADER_SEQUENCE",
+                "VA_ENC_PACKED_HEADER_PICTURE",
+                "VA_ENC_PACKED_HEADER_SLICE",
+                "VA_ENC_PACKED_HEADER_MISC",
+                "VA_ENC_PACKED_HEADER_RAW_DATA"
+            ],
+            "VAConfigAttribEncInterlaced": [
+                "VA_ENC_INTERLACED_FIELD"
+            ],
+            "VAConfigAttribEncMaxRefFrames": [
+                "ref_num_list0 = 3, ref_num_list1 = 0"
+            ],
+            "VAConfigAttribEncMaxSlices": [
+                "256"
+            ],
+            "VAConfigAttribEncSliceStructure": [
+                "VA_ENC_SLICE_STRUCTURE_EQUAL_ROWS",
+                "VA_ENC_SLICE_STRUCTURE_MAX_SLICE_SIZE"
+            ],
+            "VAConfigAttribMaxPictureWidth": [
+                "4096"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "4096"
+            ],
+            "VAConfigAttribEncJPEG": [
+                "0x0000d0c0"
+            ],
+            "VAConfigAttribEncQualityRange": [
+                "7"
+            ],
+            "VAConfigAttribEncQuantization": [
+                "VA_ENC_QUANTIZATION_TRELLIS_SUPPORTED"
+            ],
+            "VAConfigAttribEncIntraRefresh": [
+                "VA_ENC_INTRA_REFRESH_ROLLING_COLUMN",
+                "VA_ENC_INTRA_REFRESH_ROLLING_ROW"
+            ],
+            "VAConfigAttribEncSkipFrame": [
+                "0x00000001"
+            ],
+            "VAConfigAttribEncROI": [
+                "num_roi_regions = 3, priority_support = 0, delta_support = 1"
+            ],
+            "VAConfigAttribProcessingRate": [
+                "VA_PROCESSING_RATE_ENCODE"
+            ],
+            "VAConfigAttribEncDirtyRect": [
+                "0x00000004"
+            ],
+            "VAConfigAttribEncParallelRateControl": [
+                "maximum_supported_layer = 1"
+            ],
+            "VAConfigAttribFEIMVPredictors": [
+                "0x00000004"
+            ],
+            "VAConfigAttribCustomRoundingControl": [
+                "True"
+            ],
+            "VAConfigAttribMaxFrameSize": [
+                "max_frame_size = 1, multiple_pass = 1"
+            ],
+            "VAConfigAttribPredictionDirection": [
+                "VA_PREDICTION_DIRECTION_PREVIOUS"
+            ]
+        }
+    },
+    "VAProfileH264High": {
+        "VAEntrypointVLD": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420",
+                "VA_RT_FORMAT_YUV422",
+                "VA_RT_FORMAT_RGB32"
+            ],
+            "VAConfigAttribDecSliceMode": [
+                "VA_DEC_SLICE_MODE_NORMAL",
+                "VA_DEC_SLICE_MODE_BASE"
+            ],
+            "VAConfigAttribDecProcessing": [
+                "VA_DEC_PROCESSING"
+            ],
+            "VAConfigAttribMaxPictureWidth": [
+                "4096"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "4096"
+            ],
+            "VAConfigAttribProcessingRate": [
+                "VA_PROCESSING_RATE_DECODE"
+            ],
+            "VAConfigAttribCustomRoundingControl": [
+                "True"
+            ]
+        },
+        "VAEntrypointEncSlice": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420"
+            ],
+            "VAConfigAttribRateControl": [
+                "VA_RC_CBR",
+                "VA_RC_VBR",
+                "VA_RC_VCM",
+                "VA_RC_CQP",
+                "VA_RC_ICQ",
+                "VA_RC_MB",
+                "VA_RC_QVBR",
+                "VA_RC_AVBR"
+            ],
+            "VAConfigAttribEncPackedHeaders": [
+                "VA_ENC_PACKED_HEADER_SEQUENCE",
+                "VA_ENC_PACKED_HEADER_PICTURE",
+                "VA_ENC_PACKED_HEADER_SLICE",
+                "VA_ENC_PACKED_HEADER_MISC",
+                "VA_ENC_PACKED_HEADER_RAW_DATA"
+            ],
+            "VAConfigAttribEncInterlaced": [
+                "VA_ENC_INTERLACED_FIELD"
+            ],
+            "VAConfigAttribEncMaxRefFrames": [
+                "ref_num_list0 = 8, ref_num_list1 = 2"
+            ],
+            "VAConfigAttribEncMaxSlices": [
+                "256"
+            ],
+            "VAConfigAttribEncSliceStructure": [
+                "VA_ENC_SLICE_STRUCTURE_ARBITRARY_MACROBLOCKS"
+            ],
+            "VAConfigAttribMaxPictureWidth": [
+                "4096"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "4096"
+            ],
+            "VAConfigAttribEncJPEG": [
+                "0x0000d0c0"
+            ],
+            "VAConfigAttribEncQualityRange": [
+                "7"
+            ],
+            "VAConfigAttribEncQuantization": [
+                "VA_ENC_QUANTIZATION_TRELLIS_SUPPORTED"
+            ],
+            "VAConfigAttribEncIntraRefresh": [
+                "VA_ENC_INTRA_REFRESH_ROLLING_COLUMN",
+                "VA_ENC_INTRA_REFRESH_ROLLING_ROW"
+            ],
+            "VAConfigAttribEncSkipFrame": [
+                "0x00000001"
+            ],
+            "VAConfigAttribEncROI": [
+                "num_roi_regions = 8, priority_support = 0, delta_support = 1"
+            ],
+            "VAConfigAttribProcessingRate": [
+                "VA_PROCESSING_RATE_ENCODE"
+            ],
+            "VAConfigAttribEncDirtyRect": [
+                "0x00000004"
+            ],
+            "VAConfigAttribEncParallelRateControl": [
+                "maximum_supported_layer = 1"
+            ],
+            "VAConfigAttribFEIMVPredictors": [
+                "0x00000004"
+            ],
+            "VAConfigAttribCustomRoundingControl": [
+                "True"
+            ],
+            "VAConfigAttribMaxFrameSize": [
+                "max_frame_size = 1, multiple_pass = 1"
+            ]
+        },
+        "VAEntrypointFEI": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420"
+            ],
+            "VAConfigAttribRateControl": [
+                "VA_RC_CQP"
+            ],
+            "VAConfigAttribEncPackedHeaders": [
+                "VA_ENC_PACKED_HEADER_SEQUENCE",
+                "VA_ENC_PACKED_HEADER_PICTURE",
+                "VA_ENC_PACKED_HEADER_SLICE",
+                "VA_ENC_PACKED_HEADER_MISC",
+                "VA_ENC_PACKED_HEADER_RAW_DATA"
+            ],
+            "VAConfigAttribEncInterlaced": [
+                "VA_ENC_INTERLACED_FIELD"
+            ],
+            "VAConfigAttribEncMaxRefFrames": [
+                "ref_num_list0 = 8, ref_num_list1 = 2"
+            ],
+            "VAConfigAttribEncMaxSlices": [
+                "256"
+            ],
+            "VAConfigAttribEncSliceStructure": [
+                "VA_ENC_SLICE_STRUCTURE_ARBITRARY_MACROBLOCKS"
+            ],
+            "VAConfigAttribMaxPictureWidth": [
+                "4096"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "4096"
+            ],
+            "VAConfigAttribEncJPEG": [
+                "0x0000d0c0"
+            ],
+            "VAConfigAttribEncQualityRange": [
+                "7"
+            ],
+            "VAConfigAttribEncQuantization": [
+                "VA_ENC_QUANTIZATION_TRELLIS_SUPPORTED"
+            ],
+            "VAConfigAttribEncIntraRefresh": [
+                "VA_ENC_INTRA_REFRESH_ROLLING_COLUMN",
+                "VA_ENC_INTRA_REFRESH_ROLLING_ROW"
+            ],
+            "VAConfigAttribEncSkipFrame": [
+                "0x00000001"
+            ],
+            "VAConfigAttribEncROI": [
+                "num_roi_regions = 8, priority_support = 0, delta_support = 1"
+            ],
+            "VAConfigAttribProcessingRate": [
+                "VA_PROCESSING_RATE_ENCODE"
+            ],
+            "VAConfigAttribEncDirtyRect": [
+                "0x00000004"
+            ],
+            "VAConfigAttribEncParallelRateControl": [
+                "maximum_supported_layer = 1"
+            ],
+            "VAConfigAttribFEIFunctionType": [
+                "0x00000007"
+            ],
+            "VAConfigAttribFEIMVPredictors": [
+                "0x00000004"
+            ],
+            "VAConfigAttribCustomRoundingControl": [
+                "True"
+            ],
+            "VAConfigAttribMaxFrameSize": [
+                "max_frame_size = 1, multiple_pass = 1"
+            ]
+        },
+        "VAEntrypointEncSliceLP": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420"
+            ],
+            "VAConfigAttribRateControl": [
+                "VA_RC_CQP"
+            ],
+            "VAConfigAttribEncPackedHeaders": [
+                "VA_ENC_PACKED_HEADER_SEQUENCE",
+                "VA_ENC_PACKED_HEADER_PICTURE",
+                "VA_ENC_PACKED_HEADER_SLICE",
+                "VA_ENC_PACKED_HEADER_MISC",
+                "VA_ENC_PACKED_HEADER_RAW_DATA"
+            ],
+            "VAConfigAttribEncInterlaced": [
+                "VA_ENC_INTERLACED_FIELD"
+            ],
+            "VAConfigAttribEncMaxRefFrames": [
+                "ref_num_list0 = 3, ref_num_list1 = 0"
+            ],
+            "VAConfigAttribEncMaxSlices": [
+                "256"
+            ],
+            "VAConfigAttribEncSliceStructure": [
+                "VA_ENC_SLICE_STRUCTURE_EQUAL_ROWS",
+                "VA_ENC_SLICE_STRUCTURE_MAX_SLICE_SIZE"
+            ],
+            "VAConfigAttribMaxPictureWidth": [
+                "4096"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "4096"
+            ],
+            "VAConfigAttribEncJPEG": [
+                "0x0000d0c0"
+            ],
+            "VAConfigAttribEncQualityRange": [
+                "7"
+            ],
+            "VAConfigAttribEncQuantization": [
+                "VA_ENC_QUANTIZATION_TRELLIS_SUPPORTED"
+            ],
+            "VAConfigAttribEncIntraRefresh": [
+                "VA_ENC_INTRA_REFRESH_ROLLING_COLUMN",
+                "VA_ENC_INTRA_REFRESH_ROLLING_ROW"
+            ],
+            "VAConfigAttribEncSkipFrame": [
+                "0x00000001"
+            ],
+            "VAConfigAttribEncROI": [
+                "num_roi_regions = 3, priority_support = 0, delta_support = 1"
+            ],
+            "VAConfigAttribProcessingRate": [
+                "VA_PROCESSING_RATE_ENCODE"
+            ],
+            "VAConfigAttribEncDirtyRect": [
+                "0x00000004"
+            ],
+            "VAConfigAttribEncParallelRateControl": [
+                "maximum_supported_layer = 1"
+            ],
+            "VAConfigAttribFEIMVPredictors": [
+                "0x00000004"
+            ],
+            "VAConfigAttribCustomRoundingControl": [
+                "True"
+            ],
+            "VAConfigAttribMaxFrameSize": [
+                "max_frame_size = 1, multiple_pass = 1"
+            ],
+            "VAConfigAttribPredictionDirection": [
+                "VA_PREDICTION_DIRECTION_PREVIOUS"
+            ]
+        }
+    },
+    "VAProfileVC1Simple": {
+        "VAEntrypointVLD": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420",
+                "VA_RT_FORMAT_YUV422",
+                "VA_RT_FORMAT_RGB32"
+            ],
+            "VAConfigAttribDecSliceMode": [
+                "VA_DEC_SLICE_MODE_NORMAL"
+            ],
+            "VAConfigAttribDecProcessing": [],
+            "VAConfigAttribMaxPictureWidth": [
+                "2048"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "2048"
+            ],
+            "VAConfigAttribProcessingRate": [
+                "VA_PROCESSING_RATE_DECODE"
+            ],
+            "VAConfigAttribCustomRoundingControl": [
+                "False"
+            ]
+        }
+    },
+    "VAProfileVC1Main": {
+        "VAEntrypointVLD": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420",
+                "VA_RT_FORMAT_YUV422",
+                "VA_RT_FORMAT_RGB32"
+            ],
+            "VAConfigAttribDecSliceMode": [
+                "VA_DEC_SLICE_MODE_NORMAL"
+            ],
+            "VAConfigAttribDecProcessing": [],
+            "VAConfigAttribMaxPictureWidth": [
+                "2048"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "2048"
+            ],
+            "VAConfigAttribProcessingRate": [
+                "VA_PROCESSING_RATE_DECODE"
+            ],
+            "VAConfigAttribCustomRoundingControl": [
+                "False"
+            ]
+        }
+    },
+    "VAProfileVC1Advanced": {
+        "VAEntrypointVLD": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420",
+                "VA_RT_FORMAT_YUV422",
+                "VA_RT_FORMAT_RGB32"
+            ],
+            "VAConfigAttribDecSliceMode": [
+                "VA_DEC_SLICE_MODE_NORMAL"
+            ],
+            "VAConfigAttribDecProcessing": [],
+            "VAConfigAttribMaxPictureWidth": [
+                "2048"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "2048"
+            ],
+            "VAConfigAttribProcessingRate": [
+                "VA_PROCESSING_RATE_DECODE"
+            ],
+            "VAConfigAttribCustomRoundingControl": [
+                "False"
+            ]
+        }
+    },
+    "VAProfileJPEGBaseline": {
+        "VAEntrypointVLD": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420",
+                "VA_RT_FORMAT_YUV422",
+                "VA_RT_FORMAT_YUV444",
+                "VA_RT_FORMAT_YUV411",
+                "VA_RT_FORMAT_YUV400",
+                "VA_RT_FORMAT_RGB16",
+                "VA_RT_FORMAT_RGB32"
+            ],
+            "VAConfigAttribDecSliceMode": [
+                "VA_DEC_SLICE_MODE_NORMAL"
+            ],
+            "VAConfigAttribDecJPEG": [
+                "VA_ROTATION_90",
+                "VA_ROTATION_180",
+                "VA_ROTATION_270"
+            ],
+            "VAConfigAttribDecProcessing": [],
+            "VAConfigAttribMaxPictureWidth": [
+                "16384"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "16384"
+            ],
+            "VAConfigAttribProcessingRate": [
+                "VA_PROCESSING_RATE_DECODE"
+            ],
+            "VAConfigAttribCustomRoundingControl": [
+                "False"
+            ]
+        },
+        "VAEntrypointEncPicture": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420",
+                "VA_RT_FORMAT_YUV422",
+                "VA_RT_FORMAT_YUV444",
+                "VA_RT_FORMAT_YUV411",
+                "VA_RT_FORMAT_YUV400",
+                "VA_RT_FORMAT_RGB16",
+                "VA_RT_FORMAT_RGB32"
+            ],
+            "VAConfigAttribEncPackedHeaders": [
+                "VA_ENC_PACKED_HEADER_RAW_DATA"
+            ],
+            "VAConfigAttribMaxPictureWidth": [
+                "16384"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "16384"
+            ],
+            "VAConfigAttribEncJPEG": [
+                "0x0000d0c0"
+            ],
+            "VAConfigAttribEncQualityRange": [
+                "1"
+            ]
+        }
+    },
+    "VAProfileH264ConstrainedBaseline": {
+        "VAEntrypointVLD": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420",
+                "VA_RT_FORMAT_YUV422",
+                "VA_RT_FORMAT_RGB32"
+            ],
+            "VAConfigAttribDecSliceMode": [
+                "VA_DEC_SLICE_MODE_NORMAL",
+                "VA_DEC_SLICE_MODE_BASE"
+            ],
+            "VAConfigAttribDecProcessing": [
+                "VA_DEC_PROCESSING"
+            ],
+            "VAConfigAttribMaxPictureWidth": [
+                "4096"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "4096"
+            ],
+            "VAConfigAttribProcessingRate": [
+                "VA_PROCESSING_RATE_DECODE"
+            ],
+            "VAConfigAttribCustomRoundingControl": [
+                "True"
+            ]
+        },
+        "VAEntrypointEncSlice": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420"
+            ],
+            "VAConfigAttribRateControl": [
+                "VA_RC_CBR",
+                "VA_RC_VBR",
+                "VA_RC_VCM",
+                "VA_RC_CQP",
+                "VA_RC_ICQ",
+                "VA_RC_MB",
+                "VA_RC_QVBR",
+                "VA_RC_AVBR"
+            ],
+            "VAConfigAttribEncPackedHeaders": [
+                "VA_ENC_PACKED_HEADER_SEQUENCE",
+                "VA_ENC_PACKED_HEADER_PICTURE",
+                "VA_ENC_PACKED_HEADER_SLICE",
+                "VA_ENC_PACKED_HEADER_MISC",
+                "VA_ENC_PACKED_HEADER_RAW_DATA"
+            ],
+            "VAConfigAttribEncInterlaced": [
+                "VA_ENC_INTERLACED_FIELD"
+            ],
+            "VAConfigAttribEncMaxRefFrames": [
+                "ref_num_list0 = 8, ref_num_list1 = 2"
+            ],
+            "VAConfigAttribEncMaxSlices": [
+                "256"
+            ],
+            "VAConfigAttribEncSliceStructure": [
+                "VA_ENC_SLICE_STRUCTURE_ARBITRARY_MACROBLOCKS"
+            ],
+            "VAConfigAttribMaxPictureWidth": [
+                "4096"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "4096"
+            ],
+            "VAConfigAttribEncJPEG": [
+                "0x0000d0c0"
+            ],
+            "VAConfigAttribEncQualityRange": [
+                "7"
+            ],
+            "VAConfigAttribEncQuantization": [
+                "VA_ENC_QUANTIZATION_TRELLIS_SUPPORTED"
+            ],
+            "VAConfigAttribEncIntraRefresh": [
+                "VA_ENC_INTRA_REFRESH_ROLLING_COLUMN",
+                "VA_ENC_INTRA_REFRESH_ROLLING_ROW"
+            ],
+            "VAConfigAttribEncSkipFrame": [
+                "0x00000001"
+            ],
+            "VAConfigAttribEncROI": [
+                "num_roi_regions = 8, priority_support = 0, delta_support = 1"
+            ],
+            "VAConfigAttribProcessingRate": [
+                "VA_PROCESSING_RATE_ENCODE"
+            ],
+            "VAConfigAttribEncDirtyRect": [
+                "0x00000004"
+            ],
+            "VAConfigAttribEncParallelRateControl": [
+                "maximum_supported_layer = 1"
+            ],
+            "VAConfigAttribFEIMVPredictors": [
+                "0x00000004"
+            ],
+            "VAConfigAttribCustomRoundingControl": [
+                "True"
+            ],
+            "VAConfigAttribMaxFrameSize": [
+                "max_frame_size = 1, multiple_pass = 1"
+            ]
+        },
+        "VAEntrypointFEI": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420"
+            ],
+            "VAConfigAttribRateControl": [
+                "VA_RC_CQP"
+            ],
+            "VAConfigAttribEncPackedHeaders": [
+                "VA_ENC_PACKED_HEADER_SEQUENCE",
+                "VA_ENC_PACKED_HEADER_PICTURE",
+                "VA_ENC_PACKED_HEADER_SLICE",
+                "VA_ENC_PACKED_HEADER_MISC",
+                "VA_ENC_PACKED_HEADER_RAW_DATA"
+            ],
+            "VAConfigAttribEncInterlaced": [
+                "VA_ENC_INTERLACED_FIELD"
+            ],
+            "VAConfigAttribEncMaxRefFrames": [
+                "ref_num_list0 = 8, ref_num_list1 = 2"
+            ],
+            "VAConfigAttribEncMaxSlices": [
+                "256"
+            ],
+            "VAConfigAttribEncSliceStructure": [
+                "VA_ENC_SLICE_STRUCTURE_ARBITRARY_MACROBLOCKS"
+            ],
+            "VAConfigAttribMaxPictureWidth": [
+                "4096"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "4096"
+            ],
+            "VAConfigAttribEncJPEG": [
+                "0x0000d0c0"
+            ],
+            "VAConfigAttribEncQualityRange": [
+                "7"
+            ],
+            "VAConfigAttribEncQuantization": [
+                "VA_ENC_QUANTIZATION_TRELLIS_SUPPORTED"
+            ],
+            "VAConfigAttribEncIntraRefresh": [
+                "VA_ENC_INTRA_REFRESH_ROLLING_COLUMN",
+                "VA_ENC_INTRA_REFRESH_ROLLING_ROW"
+            ],
+            "VAConfigAttribEncSkipFrame": [
+                "0x00000001"
+            ],
+            "VAConfigAttribEncROI": [
+                "num_roi_regions = 8, priority_support = 0, delta_support = 1"
+            ],
+            "VAConfigAttribProcessingRate": [
+                "VA_PROCESSING_RATE_ENCODE"
+            ],
+            "VAConfigAttribEncDirtyRect": [
+                "0x00000004"
+            ],
+            "VAConfigAttribEncParallelRateControl": [
+                "maximum_supported_layer = 1"
+            ],
+            "VAConfigAttribFEIFunctionType": [
+                "0x00000007"
+            ],
+            "VAConfigAttribFEIMVPredictors": [
+                "0x00000004"
+            ],
+            "VAConfigAttribCustomRoundingControl": [
+                "True"
+            ],
+            "VAConfigAttribMaxFrameSize": [
+                "max_frame_size = 1, multiple_pass = 1"
+            ]
+        },
+        "VAEntrypointEncSliceLP": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420"
+            ],
+            "VAConfigAttribRateControl": [
+                "VA_RC_CQP"
+            ],
+            "VAConfigAttribEncPackedHeaders": [
+                "VA_ENC_PACKED_HEADER_SEQUENCE",
+                "VA_ENC_PACKED_HEADER_PICTURE",
+                "VA_ENC_PACKED_HEADER_SLICE",
+                "VA_ENC_PACKED_HEADER_MISC",
+                "VA_ENC_PACKED_HEADER_RAW_DATA"
+            ],
+            "VAConfigAttribEncInterlaced": [
+                "VA_ENC_INTERLACED_FIELD"
+            ],
+            "VAConfigAttribEncMaxRefFrames": [
+                "ref_num_list0 = 3, ref_num_list1 = 0"
+            ],
+            "VAConfigAttribEncMaxSlices": [
+                "256"
+            ],
+            "VAConfigAttribEncSliceStructure": [
+                "VA_ENC_SLICE_STRUCTURE_EQUAL_ROWS",
+                "VA_ENC_SLICE_STRUCTURE_MAX_SLICE_SIZE"
+            ],
+            "VAConfigAttribMaxPictureWidth": [
+                "4096"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "4096"
+            ],
+            "VAConfigAttribEncJPEG": [
+                "0x0000d0c0"
+            ],
+            "VAConfigAttribEncQualityRange": [
+                "7"
+            ],
+            "VAConfigAttribEncQuantization": [
+                "VA_ENC_QUANTIZATION_TRELLIS_SUPPORTED"
+            ],
+            "VAConfigAttribEncIntraRefresh": [
+                "VA_ENC_INTRA_REFRESH_ROLLING_COLUMN",
+                "VA_ENC_INTRA_REFRESH_ROLLING_ROW"
+            ],
+            "VAConfigAttribEncSkipFrame": [
+                "0x00000001"
+            ],
+            "VAConfigAttribEncROI": [
+                "num_roi_regions = 3, priority_support = 0, delta_support = 1"
+            ],
+            "VAConfigAttribProcessingRate": [
+                "VA_PROCESSING_RATE_ENCODE"
+            ],
+            "VAConfigAttribEncDirtyRect": [
+                "0x00000004"
+            ],
+            "VAConfigAttribEncParallelRateControl": [
+                "maximum_supported_layer = 1"
+            ],
+            "VAConfigAttribFEIMVPredictors": [
+                "0x00000004"
+            ],
+            "VAConfigAttribCustomRoundingControl": [
+                "True"
+            ],
+            "VAConfigAttribMaxFrameSize": [
+                "max_frame_size = 1, multiple_pass = 1"
+            ],
+            "VAConfigAttribPredictionDirection": [
+                "VA_PREDICTION_DIRECTION_PREVIOUS"
+            ]
+        }
+    },
+    "VAProfileVP8Version0_3": {
+        "VAEntrypointVLD": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420",
+                "VA_RT_FORMAT_YUV422",
+                "VA_RT_FORMAT_RGB32"
+            ],
+            "VAConfigAttribDecSliceMode": [
+                "VA_DEC_SLICE_MODE_NORMAL"
+            ],
+            "VAConfigAttribDecProcessing": [],
+            "VAConfigAttribMaxPictureWidth": [
+                "4096"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "4096"
+            ],
+            "VAConfigAttribProcessingRate": [
+                "VA_PROCESSING_RATE_DECODE"
+            ],
+            "VAConfigAttribCustomRoundingControl": [
+                "False"
+            ]
+        },
+        "VAEntrypointEncSlice": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420"
+            ],
+            "VAConfigAttribRateControl": [
+                "VA_RC_CBR",
+                "VA_RC_VBR",
+                "VA_RC_CQP",
+                "VA_RC_MB"
+            ],
+            "VAConfigAttribEncInterlaced": [],
+            "VAConfigAttribEncMaxRefFrames": [
+                "ref_num_list0 = 3, ref_num_list1 = 0"
+            ],
+            "VAConfigAttribEncMaxSlices": [
+                "0"
+            ],
+            "VAConfigAttribEncSliceStructure": [
+                "VA_ENC_SLICE_STRUCTURE_ARBITRARY_MACROBLOCKS"
+            ],
+            "VAConfigAttribMaxPictureWidth": [
+                "4096"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "4096"
+            ],
+            "VAConfigAttribEncJPEG": [
+                "0x0000d0c0"
+            ],
+            "VAConfigAttribEncQualityRange": [
+                "7"
+            ],
+            "VAConfigAttribEncQuantization": [],
+            "VAConfigAttribEncIntraRefresh": [],
+            "VAConfigAttribEncSkipFrame": [
+                "0x00000001"
+            ],
+            "VAConfigAttribEncROI": [
+                "num_roi_regions = 0, priority_support = 0, delta_support = 0"
+            ],
+            "VAConfigAttribProcessingRate": [
+                "VA_PROCESSING_RATE_ENCODE"
+            ],
+            "VAConfigAttribEncDirtyRect": [
+                "0x00000004"
+            ],
+            "VAConfigAttribEncParallelRateControl": [
+                "maximum_supported_layer = 1"
+            ],
+            "VAConfigAttribFEIMVPredictors": [
+                "0x00000000"
+            ],
+            "VAConfigAttribCustomRoundingControl": [
+                "False"
+            ]
+        }
+    },
+    "VAProfileHEVCMain": {
+        "VAEntrypointVLD": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420",
+                "VA_RT_FORMAT_YUV422",
+                "VA_RT_FORMAT_RGB32"
+            ],
+            "VAConfigAttribDecSliceMode": [
+                "VA_DEC_SLICE_MODE_NORMAL"
+            ],
+            "VAConfigAttribDecProcessing": [
+                "VA_DEC_PROCESSING"
+            ],
+            "VAConfigAttribMaxPictureWidth": [
+                "8192"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "8192"
+            ],
+            "VAConfigAttribProcessingRate": [
+                "VA_PROCESSING_RATE_DECODE"
+            ],
+            "VAConfigAttribCustomRoundingControl": [
+                "False"
+            ]
+        },
+        "VAEntrypointEncSlice": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420"
+            ],
+            "VAConfigAttribRateControl": [
+                "VA_RC_CBR",
+                "VA_RC_VBR",
+                "VA_RC_VCM",
+                "VA_RC_CQP",
+                "VA_RC_ICQ",
+                "VA_RC_MB",
+                "VA_RC_QVBR"
+            ],
+            "VAConfigAttribEncPackedHeaders": [
+                "VA_ENC_PACKED_HEADER_SEQUENCE",
+                "VA_ENC_PACKED_HEADER_PICTURE",
+                "VA_ENC_PACKED_HEADER_SLICE",
+                "VA_ENC_PACKED_HEADER_MISC",
+                "VA_ENC_PACKED_HEADER_RAW_DATA"
+            ],
+            "VAConfigAttribEncInterlaced": [],
+            "VAConfigAttribEncMaxRefFrames": [
+                "ref_num_list0 = 3, ref_num_list1 = 1"
+            ],
+            "VAConfigAttribEncMaxSlices": [
+                "200"
+            ],
+            "VAConfigAttribEncSliceStructure": [
+                "VA_ENC_SLICE_STRUCTURE_ARBITRARY_MACROBLOCKS"
+            ],
+            "VAConfigAttribMaxPictureWidth": [
+                "8192"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "8192"
+            ],
+            "VAConfigAttribEncJPEG": [
+                "0x0000d0c0"
+            ],
+            "VAConfigAttribEncQualityRange": [
+                "7"
+            ],
+            "VAConfigAttribEncQuantization": [],
+            "VAConfigAttribEncIntraRefresh": [],
+            "VAConfigAttribEncSkipFrame": [
+                "0x00000001"
+            ],
+            "VAConfigAttribEncROI": [
+                "num_roi_regions = 16, priority_support = 0, delta_support = 1"
+            ],
+            "VAConfigAttribProcessingRate": [
+                "VA_PROCESSING_RATE_ENCODE"
+            ],
+            "VAConfigAttribEncDirtyRect": [
+                "0x00000004"
+            ],
+            "VAConfigAttribEncParallelRateControl": [
+                "maximum_supported_layer = 1"
+            ],
+            "VAConfigAttribFEIMVPredictors": [
+                "0x00000004"
+            ],
+            "VAConfigAttribCustomRoundingControl": [
+                "False"
+            ]
+        },
+        "VAEntrypointFEI": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420"
+            ],
+            "VAConfigAttribRateControl": [
+                "VA_RC_CQP"
+            ],
+            "VAConfigAttribEncPackedHeaders": [
+                "VA_ENC_PACKED_HEADER_SEQUENCE",
+                "VA_ENC_PACKED_HEADER_PICTURE",
+                "VA_ENC_PACKED_HEADER_SLICE",
+                "VA_ENC_PACKED_HEADER_MISC",
+                "VA_ENC_PACKED_HEADER_RAW_DATA"
+            ],
+            "VAConfigAttribEncInterlaced": [],
+            "VAConfigAttribEncMaxRefFrames": [
+                "ref_num_list0 = 3, ref_num_list1 = 1"
+            ],
+            "VAConfigAttribEncMaxSlices": [
+                "0"
+            ],
+            "VAConfigAttribEncSliceStructure": [
+                "VA_ENC_SLICE_STRUCTURE_ARBITRARY_MACROBLOCKS"
+            ],
+            "VAConfigAttribMaxPictureWidth": [
+                "8192"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "8192"
+            ],
+            "VAConfigAttribEncJPEG": [
+                "0x0000d0c0"
+            ],
+            "VAConfigAttribEncQualityRange": [
+                "7"
+            ],
+            "VAConfigAttribEncQuantization": [],
+            "VAConfigAttribEncIntraRefresh": [],
+            "VAConfigAttribEncSkipFrame": [
+                "0x00000001"
+            ],
+            "VAConfigAttribEncROI": [
+                "num_roi_regions = 16, priority_support = 0, delta_support = 1"
+            ],
+            "VAConfigAttribProcessingRate": [
+                "VA_PROCESSING_RATE_ENCODE"
+            ],
+            "VAConfigAttribEncDirtyRect": [
+                "0x00000004"
+            ],
+            "VAConfigAttribEncParallelRateControl": [
+                "maximum_supported_layer = 1"
+            ],
+            "VAConfigAttribFEIFunctionType": [
+                "0x00000004"
+            ],
+            "VAConfigAttribFEIMVPredictors": [
+                "0x00000004"
+            ],
+            "VAConfigAttribCustomRoundingControl": [
+                "False"
+            ]
+        }
+    },
+    "VAProfileHEVCMain10": {
+        "VAEntrypointVLD": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420",
+                "VA_RT_FORMAT_YUV420_10"
+            ],
+            "VAConfigAttribDecSliceMode": [
+                "VA_DEC_SLICE_MODE_NORMAL"
+            ],
+            "VAConfigAttribDecProcessing": [
+                "VA_DEC_PROCESSING"
+            ],
+            "VAConfigAttribMaxPictureWidth": [
+                "8192"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "8192"
+            ],
+            "VAConfigAttribProcessingRate": [
+                "VA_PROCESSING_RATE_DECODE"
+            ],
+            "VAConfigAttribCustomRoundingControl": [
+                "False"
+            ]
+        },
+        "VAEntrypointEncSlice": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420_10"
+            ],
+            "VAConfigAttribRateControl": [
+                "VA_RC_CBR",
+                "VA_RC_VBR",
+                "VA_RC_VCM",
+                "VA_RC_CQP",
+                "VA_RC_ICQ",
+                "VA_RC_MB",
+                "VA_RC_QVBR"
+            ],
+            "VAConfigAttribEncPackedHeaders": [
+                "VA_ENC_PACKED_HEADER_SEQUENCE",
+                "VA_ENC_PACKED_HEADER_PICTURE",
+                "VA_ENC_PACKED_HEADER_SLICE",
+                "VA_ENC_PACKED_HEADER_MISC",
+                "VA_ENC_PACKED_HEADER_RAW_DATA"
+            ],
+            "VAConfigAttribEncInterlaced": [],
+            "VAConfigAttribEncMaxRefFrames": [
+                "ref_num_list0 = 3, ref_num_list1 = 1"
+            ],
+            "VAConfigAttribEncMaxSlices": [
+                "200"
+            ],
+            "VAConfigAttribEncSliceStructure": [
+                "VA_ENC_SLICE_STRUCTURE_ARBITRARY_MACROBLOCKS"
+            ],
+            "VAConfigAttribMaxPictureWidth": [
+                "8192"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "8192"
+            ],
+            "VAConfigAttribEncJPEG": [
+                "0x0000d0c0"
+            ],
+            "VAConfigAttribEncQualityRange": [
+                "7"
+            ],
+            "VAConfigAttribEncQuantization": [],
+            "VAConfigAttribEncIntraRefresh": [],
+            "VAConfigAttribEncSkipFrame": [
+                "0x00000001"
+            ],
+            "VAConfigAttribEncROI": [
+                "num_roi_regions = 16, priority_support = 0, delta_support = 1"
+            ],
+            "VAConfigAttribProcessingRate": [
+                "VA_PROCESSING_RATE_ENCODE"
+            ],
+            "VAConfigAttribEncDirtyRect": [
+                "0x00000004"
+            ],
+            "VAConfigAttribEncParallelRateControl": [
+                "maximum_supported_layer = 1"
+            ],
+            "VAConfigAttribFEIMVPredictors": [
+                "0x00000004"
+            ],
+            "VAConfigAttribCustomRoundingControl": [
+                "False"
+            ]
+        }
+    },
+    "VAProfileVP9Profile0": {
+        "VAEntrypointVLD": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420",
+                "VA_RT_FORMAT_YUV422",
+                "VA_RT_FORMAT_YUV420_10",
+                "VA_RT_FORMAT_RGB32"
+            ],
+            "VAConfigAttribDecSliceMode": [
+                "VA_DEC_SLICE_MODE_NORMAL",
+                "VA_DEC_SLICE_MODE_BASE"
+            ],
+            "VAConfigAttribDecProcessing": [],
+            "VAConfigAttribMaxPictureWidth": [
+                "8192"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "8192"
+            ],
+            "VAConfigAttribProcessingRate": [
+                "VA_PROCESSING_RATE_DECODE"
+            ],
+            "VAConfigAttribCustomRoundingControl": [
+                "False"
+            ]
+        }
+    },
+    "VAProfileVP9Profile2": {
+        "VAEntrypointVLD": {
+            "VAConfigAttribRTFormat": [
+                "VA_RT_FORMAT_YUV420",
+                "VA_RT_FORMAT_YUV422",
+                "VA_RT_FORMAT_YUV420_10",
+                "VA_RT_FORMAT_RGB32"
+            ],
+            "VAConfigAttribDecSliceMode": [
+                "VA_DEC_SLICE_MODE_NORMAL",
+                "VA_DEC_SLICE_MODE_BASE"
+            ],
+            "VAConfigAttribDecProcessing": [],
+            "VAConfigAttribMaxPictureWidth": [
+                "8192"
+            ],
+            "VAConfigAttribMaxPictureHeight": [
+                "8192"
+            ],
+            "VAConfigAttribProcessingRate": [
+                "VA_PROCESSING_RATE_DECODE"
+            ],
+            "VAConfigAttribCustomRoundingControl": [
+                "False"
+            ]
+        }
+    }
+}
