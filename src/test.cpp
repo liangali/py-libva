@@ -15,7 +15,10 @@
 using namespace std;
 
 VAStatus va_status;
+int major_ver, minor_ver;
 int ret_val = 0;
+static VADisplay va_dpy = NULL;
+static int drm_fd = -1;
 
 #define CHECK_VASTATUS(va_status,func, ret)                             \
 if (va_status != VA_STATUS_SUCCESS) {                                   \
@@ -23,9 +26,6 @@ if (va_status != VA_STATUS_SUCCESS) {                                   \
     ret_val = ret;                                                      \
     exit(1);                                                         \
 }
-
-static VADisplay va_dpy = NULL;
-static int drm_fd = -1;
 
 #define VA_PROFILE_MAP(P)  {P, #P}
 
@@ -70,8 +70,6 @@ void closeVADisplay()
 
 int test_caps() 
 {
-    int major_ver, minor_ver;
-
     va_dpy = getVADisplay();
     printf("####INFO: va_dpy = %x\n", va_dpy);
 
@@ -249,8 +247,6 @@ int save_surface(VASurfaceID surf_id)
 
 int test_vpp()
 {
-    int major_ver, minor_ver;
-
     uint32_t srcw = 320;
     uint32_t srch = 240;
     uint32_t dstw = 640;
@@ -335,11 +331,47 @@ int test_vpp()
     return 0;
 }
 
+int test_attrib()
+{
+    va_dpy = getVADisplay();
+    va_status = vaInitialize(va_dpy, &major_ver, &minor_ver);
+    printf("####INFO: major_ver = %d, minor_ver = %d\n", major_ver, minor_ver);
+
+    printf("####INFO: %d\n", vaMaxNumDisplayAttributes(va_dpy));
+
+    VADisplayAttribute attr_list[16] = {};
+    int num_attributes = 0;
+    va_status = vaQueryDisplayAttributes(va_dpy, attr_list, &num_attributes);
+    CHECK_VASTATUS(va_status, "vaQueryDisplayAttributes", 1);
+
+    VADisplayAttribValMemoryRegion mem_region = {};
+    mem_region.value = attr_list[0].value;
+
+    VADisplayAttribute mem_attribute = {};
+    mem_attribute.type = VADisplayAttribMemoryRegion;
+    va_status = vaGetDisplayAttributes(va_dpy, &mem_attribute, 1);
+    CHECK_VASTATUS(va_status, "vaGetDisplayAttributes", 1);
+    VADisplayAttribValMemoryRegion* p = (VADisplayAttribValMemoryRegion*)&mem_attribute.value;
+    printf("####INFO: current_tile = %d, tile_num = %d, tile_mask = 0x%08x\n", p->bits.current_memory_region, p->bits.local_memory_regions, p->bits.memory_regions_masks);
+
+    VADisplayAttribute mem_attribute2 = {};
+    mem_attribute2.type = VADisplayAttribMemoryRegion;
+    mem_attribute2.value = mem_region.value;
+    VADisplayAttribValMemoryRegion* p_mem_region = (VADisplayAttribValMemoryRegion*)&mem_attribute2.value;
+    p_mem_region->bits.current_memory_region = 1;
+    va_status = vaSetDisplayAttributes(va_dpy, &mem_attribute2, 1);
+    CHECK_VASTATUS(va_status, "vaSetDisplayAttributes", 1);
+
+    closeVADisplay();
+    return 0;
+}
+
 int main()
 {
     //test_caps();
+    //test_vpp();
 
-    test_vpp();
+    test_attrib();
 
     return 0;
 }

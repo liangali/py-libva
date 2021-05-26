@@ -500,6 +500,11 @@ uint64_t vaInit()
     return uint64_t(va_dpy);
 }
 
+uint32_t getMaxDisplayAttributesNum()
+{
+    return vaMaxNumDisplayAttributes(va_dpy);
+}
+
 std::vector<const char*> getProfiles() 
 {
     std::vector<const char*> profile_list;
@@ -914,6 +919,8 @@ PYBIND11_MODULE(pylibva, m) {
     m.doc() = "libva python bindings"; // optional module docstring
     m.def("init", &vaInit, "Initialize VADisplay");
     m.def("close", &vaClose, "Close VADisplay and drm fd");
+
+    m.def("attribute_num", &getMaxDisplayAttributesNum, "Get max number of display attributes");
 
     m.def("profiles", &getProfiles, "Query supported profiles");
     m.def("entrypoints", &getEntrypoints, "Query supported entrypoints for a given profile");
