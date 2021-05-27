@@ -37,6 +37,6 @@ def test_set_attr(loop):
         pyva.close()
 
 # test_query(10)
-get_set_attr(4)
+test_set_attr(1)
 
 print('done')
