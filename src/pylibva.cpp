@@ -505,6 +505,48 @@ uint32_t getMaxDisplayAttributesNum()
     return vaMaxNumDisplayAttributes(va_dpy);
 }
 
+std::vector<std::map<const char*, uint32_t>> queryDisplayAttributes()
+{
+    std::vector<std::map<const char*, uint32_t>> result;
+    
+    VADisplayAttribute attr_list[32] = {};
+    int num_attributes = 0;
+    va_status = vaQueryDisplayAttributes(va_dpy, attr_list, &num_attributes);
+    if (va_status != VA_STATUS_SUCCESS) {
+        printf("ERROR: vaQueryDisplayAttributes failed\n");
+        return result;
+    }
+
+    // this is to WA driver implementation bug
+    if (attr_list[0].type == 19) //VADisplayAttribMemoryRegion = 19
+    {
+        num_attributes = 1;
+    }
+
+    for (size_t i = 0; i < num_attributes; i++)
+    {
+        std::map<const char*, uint32_t> attr;
+        attr["type"] = attr_list[i].type; 
+        attr["min_value"] = attr_list[i].min_value;
+        attr["max_value"] = attr_list[i].max_value;
+        attr["value"] = attr_list[i].value;
+        attr["flags"] = attr_list[i].flags;
+        result.push_back(attr);
+    }
+
+    return result;
+}
+
+uint32_t getDisplayAttributes(int type)
+{
+    return 0;
+}
+
+void setDisplayAttributes()
+{
+    return;
+}
+
 std::vector<const char*> getProfiles() 
 {
     std::vector<const char*> profile_list;
@@ -920,7 +962,10 @@ PYBIND11_MODULE(pylibva, m) {
     m.def("init", &vaInit, "Initialize VADisplay");
     m.def("close", &vaClose, "Close VADisplay and drm fd");
 
-    m.def("attribute_num", &getMaxDisplayAttributesNum, "Get max number of display attributes");
+    m.def("attr_num", &getMaxDisplayAttributesNum, "Get max number of display attributes");
+    m.def("query_attr", &queryDisplayAttributes, "Query all display attributes");
+    m.def("get_attr", &getDisplayAttributes, "Get display attributes");
+    m.def("set_attr", &setDisplayAttributes, "Set max number of display attributes");
 
     m.def("profiles", &getProfiles, "Query supported profiles");
     m.def("entrypoints", &getEntrypoints, "Query supported entrypoints for a given profile");
