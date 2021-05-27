@@ -537,13 +537,65 @@ std::vector<std::map<const char*, uint32_t>> queryDisplayAttributes()
     return result;
 }
 
-uint32_t getDisplayAttributes(int type)
+std::map<const char*, uint32_t> getDisplayAttributes(int type)
 {
-    return 0;
+    std::map<const char*, uint32_t> attr;
+
+    if (type != 19) { //VADisplayAttribMemoryRegion = 19
+        printf("ERROR: only support VADisplayAttribMemoryRegion\n");
+        return attr;
+    }
+
+    VADisplayAttribute mem_attribute = {};
+    mem_attribute.type = VADisplayAttribMemoryRegion;
+    va_status = vaGetDisplayAttributes(va_dpy, &mem_attribute, 1);
+    if (va_status != VA_STATUS_SUCCESS) {
+        printf("ERROR: vaGetDisplayAttributes failed\n");
+        return attr;
+    }
+
+    attr["type"] = mem_attribute.type; 
+    attr["min_value"] = mem_attribute.min_value;
+    attr["max_value"] = mem_attribute.max_value;
+    attr["value"] = mem_attribute.value;
+    attr["flags"] = mem_attribute.flags;
+
+    return attr;
 }
 
-void setDisplayAttributes()
+void setDisplayAttributes(int type, int region_id)
 {
+    printf("####INFO: type = %d, new_region_id = %d\n", type, region_id);
+    if (type != 19) { //VADisplayAttribMemoryRegion = 19
+        printf("ERROR: only support VADisplayAttribMemoryRegion\n");
+        return;
+    }
+
+    if (region_id < 0 || region_id > 2) { //VADisplayAttribMemoryRegion = 19
+        printf("ERROR: invalid region id\n");
+        return;
+    }
+
+    // get old attribute
+    VADisplayAttribute old_attribute = {};
+    old_attribute.type = VADisplayAttribMemoryRegion;
+    va_status = vaGetDisplayAttributes(va_dpy, &old_attribute, 1);
+    if (va_status != VA_STATUS_SUCCESS) {
+        printf("ERROR: vaGetDisplayAttributes failed\n");
+        return;
+    }
+
+    VADisplayAttribute new_attribute = {};
+    new_attribute.type = VADisplayAttribMemoryRegion;
+    new_attribute.value = old_attribute.value;
+    VADisplayAttribValMemoryRegion* p_mem_region = (VADisplayAttribValMemoryRegion*)&new_attribute.value;
+    p_mem_region->bits.current_memory_region = region_id;
+    va_status = vaSetDisplayAttributes(va_dpy, &new_attribute, 1);
+    if (va_status != VA_STATUS_SUCCESS) {
+        printf("ERROR: vaSetDisplayAttributes failed\n");
+        return;
+    }
+
     return;
 }
 
