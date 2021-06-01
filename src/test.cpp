@@ -335,9 +335,9 @@ int test_attrib()
 {
     va_dpy = getVADisplay();
     va_status = vaInitialize(va_dpy, &major_ver, &minor_ver);
-    printf("####INFO: major_ver = %d, minor_ver = %d\n", major_ver, minor_ver);
+    printf("####Test: major_ver = %d, minor_ver = %d\n", major_ver, minor_ver);
 
-    printf("####INFO: %d\n", vaMaxNumDisplayAttributes(va_dpy));
+    printf("####Test: %d\n", vaMaxNumDisplayAttributes(va_dpy));
 
     VADisplayAttribute attr_list[16] = {};
     int num_attributes = 0;
@@ -352,7 +352,7 @@ int test_attrib()
     va_status = vaGetDisplayAttributes(va_dpy, &mem_attribute, 1);
     CHECK_VASTATUS(va_status, "vaGetDisplayAttributes", 1);
     VADisplayAttribValMemoryRegion* p = (VADisplayAttribValMemoryRegion*)&mem_attribute.value;
-    printf("####INFO: current_tile = %d, tile_num = %d, tile_mask = 0x%08x\n", p->bits.current_memory_region, p->bits.local_memory_regions, p->bits.memory_regions_masks);
+    printf("####Test: current_tile = %d, tile_num = %d, tile_mask = 0x%08x\n", p->bits.current_memory_region, p->bits.local_memory_regions, p->bits.memory_regions_masks);
 
     VADisplayAttribute mem_attribute2 = {};
     mem_attribute2.type = VADisplayAttribMemoryRegion;
@@ -361,6 +361,20 @@ int test_attrib()
     p_mem_region->bits.current_memory_region = 1;
     va_status = vaSetDisplayAttributes(va_dpy, &mem_attribute2, 1);
     CHECK_VASTATUS(va_status, "vaSetDisplayAttributes", 1);
+
+    // creat RT surface
+    VASurfaceID test_surf = VA_INVALID_ID;
+    VASurfaceAttrib surf_attrib = {};
+    uint32_t test_fourcc  = VA_FOURCC('N','V','1','2');
+    uint32_t test_format  = VA_RT_FORMAT_YUV420;
+    surf_attrib.type =  VASurfaceAttribPixelFormat;
+    surf_attrib.flags = VA_SURFACE_ATTRIB_SETTABLE;
+    surf_attrib.value.type = VAGenericValueTypeInteger;
+    surf_attrib.value.value.i = test_fourcc;
+    va_status = vaCreateSurfaces(va_dpy, test_format, 640, 480, &test_surf, 1, &surf_attrib, 1);
+    CHECK_VASTATUS(va_status, "vaCreateSurfaces", 1);
+    printf("####Test: test_surf = %d\n", test_surf);
+    vaDestroySurfaces(va_dpy, &test_surf, 1);
 
     closeVADisplay();
     return 0;
